@@ -10,6 +10,7 @@ namespace DoodleClassifier
 		public PreviewForm()
 		{
 			InitializeComponent();
+			InitializeDrawing();
 		}
 
 		#region Dataset Display
@@ -62,6 +63,40 @@ namespace DoodleClassifier
 				--current;
 				DrawCurrent();
 			}
+		}
+
+		#endregion
+
+		#region Drawing
+
+		private Bitmap drawingBmp = null;
+		private Graphics drawingGraphics = null;
+		private Brush drawingBrush = null;
+
+		private void InitializeDrawing()
+		{
+			drawingBmp = new Bitmap(140, 140, PixelFormat.Format32bppArgb);
+			drawingGraphics = Graphics.FromImage(drawingBmp);
+			drawingBrush = new SolidBrush(Color.Black);
+			btnClear_Click(this, EventArgs.Empty);
+		}
+
+		private void btnClear_Click(object sender, EventArgs e)
+		{
+			drawingGraphics.Clear(Color.White);
+			pbDraw.Refresh();
+		}
+
+		private void pbDraw_MouseMove(object sender, MouseEventArgs e)
+		{
+			if (!e.Button.HasFlag(MouseButtons.Left)) return;
+			drawingGraphics.FillEllipse(drawingBrush, e.X, e.Y, 6, 6);
+			pbDraw.Refresh();
+		}
+
+		private void pbDraw_Paint(object sender, PaintEventArgs e)
+		{
+			e.Graphics.DrawImage(drawingBmp, 0, 0);
 		}
 
 		#endregion
