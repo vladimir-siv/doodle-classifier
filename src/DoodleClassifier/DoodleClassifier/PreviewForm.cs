@@ -7,18 +7,22 @@ namespace DoodleClassifier
 {
 	public partial class PreviewForm : Form
 	{
-		private uint current = 0u;
-		private RawData data = RawData.From(Categories.Bananas);
-
 		public PreviewForm()
 		{
 			InitializeComponent();
 		}
 
+		#region Dataset Display
+
+		private CategoryChooser categoryChooser = new CategoryChooser();
+
+		private uint current = 0u;
+		private RawData data = null;
+
 		private void DrawCurrent()
 		{
 			var old = pbPreview.BackgroundImage;
-			
+
 			var bmp = new Bitmap(28, 28, PixelFormat.Format32bppArgb);
 
 			for (var i = 0; i < RawData.ImageHeight; ++i)
@@ -35,13 +39,17 @@ namespace DoodleClassifier
 			old?.Dispose();
 		}
 
-		private void PreviewForm_Load(object sender, EventArgs e)
+		private void btnLoadData_Click(object sender, EventArgs e)
 		{
+			var choice = categoryChooser.ShowDialog();
+			if (choice == null) return;
+			data = RawData.From(choice);
+			current = 0u;
 			DrawCurrent();
 		}
 		private void btnNext_Click(object sender, EventArgs e)
 		{
-			if (current < data.ImageCount)
+			if (data != null && current < data.ImageCount)
 			{
 				++current;
 				DrawCurrent();
@@ -49,16 +57,22 @@ namespace DoodleClassifier
 		}
 		private void btnPrev_Click(object sender, EventArgs e)
 		{
-			if (current > 0u)
+			if (data != null && current > 0u)
 			{
 				--current;
 				DrawCurrent();
 			}
 		}
 
+		#endregion
+
+		#region Testing
+
 		private void btnTest_Click(object sender, EventArgs e)
 		{
 
 		}
+
+		#endregion
 	}
 }
