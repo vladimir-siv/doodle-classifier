@@ -12,7 +12,7 @@ namespace DoodleClassifier
 		public const string Dogs = "dog";
 		public const string Dragons = "dragon";
 
-		private static List<string> categories = new List<string>()
+		private static readonly List<string> categories = new List<string>()
 		{
 			Airplanes,
 			Angels,

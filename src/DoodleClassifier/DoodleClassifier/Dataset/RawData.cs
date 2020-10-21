@@ -10,7 +10,7 @@ namespace DoodleClassifier
 		public const uint ImageWidth = 28u;
 		public const uint ImageHeight = 28u;
 
-		private static Dictionary<string, RawData> DataCache = new Dictionary<string, RawData>();
+		private static readonly Dictionary<string, RawData> DataCache = new Dictionary<string, RawData>();
 		public static RawData From(string category)
 		{
 			if (DataCache.TryGetValue(category, out var data)) return data;

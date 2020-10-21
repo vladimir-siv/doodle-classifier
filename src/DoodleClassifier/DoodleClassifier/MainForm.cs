@@ -20,7 +20,7 @@ namespace DoodleClassifier
 
 		#region Dataset Display
 
-		private CategoryChooser categoryChooser = new CategoryChooser();
+		private readonly CategoryChooser categoryChooser = new CategoryChooser();
 
 		private uint current = 0u;
 		private RawData data = null;
