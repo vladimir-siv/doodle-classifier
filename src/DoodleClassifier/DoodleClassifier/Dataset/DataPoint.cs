@@ -18,9 +18,9 @@ namespace DoodleClassifier
 			set
 			{
 				if (value == classString) return;
-				Class = Categories.OneHot(value);
 				classString = value;
 				if (classString == null) Class = null;
+				else Class = Categories.OneHot(classString);
 			}
 		}
 

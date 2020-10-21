@@ -29,7 +29,7 @@ namespace DoodleClassifier
 
 		private readonly CategoryChooser categoryChooser = new CategoryChooser();
 
-		private uint current = 0u;
+		private ulong current = 0ul;
 		private RawData data = null;
 
 		private void DrawCurrent()
@@ -58,7 +58,7 @@ namespace DoodleClassifier
 			var choice = categoryChooser.ShowDialog();
 			if (choice == null) return;
 			data = RawData.From(choice);
-			current = 0u;
+			current = 0ul;
 			DrawCurrent();
 		}
 		private void btnNext_Click(object sender, EventArgs e)
@@ -71,7 +71,7 @@ namespace DoodleClassifier
 		}
 		private void btnPrev_Click(object sender, EventArgs e)
 		{
-			if (data != null && current > 0u)
+			if (data != null && current > 0ul)
 			{
 				--current;
 				DrawCurrent();
@@ -173,12 +173,79 @@ namespace DoodleClassifier
 
 		#region Testing
 
-		private void btnTest_Click(object sender, EventArgs e)
+		private async void btnTest_Click(object sender, EventArgs e)
 		{
+			if (data == null)
+			{
+				MessageBox.Show("Please, select an image from dataset preview.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
 
+			var desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+			var log = System.IO.Path.Combine(desktop, "log.txt");
+			if (System.IO.File.Exists(log)) System.IO.File.Delete(log);
+
+			void dumpvals(params float[] values)
+			{
+				var sb = new System.Text.StringBuilder();
+
+				for (var i = 0; i < values.Length; ++i)
+				{
+					sb.Append($"{values[i]:0.00000000} ");
+				}
+
+				sb.AppendLine();
+
+				System.IO.File.AppendAllText(log, sb.ToString());
+			}
+
+			using (var dp = new DataPoint())
+			{
+				var ds = Dataset.Current;
+
+				// Zero out
+				{
+					dp.Data.Format(0f);
+					var vals = dp.Data.GetData();
+					dumpvals(vals);
+				}
+
+				// Direct preprocess
+				{
+					await ds.PreprocessImage(dp, data.Category, current);
+					var vals = dp.Data.GetData();
+					dumpvals(vals);
+				}
+
+				// Zero out
+				{
+					dp.Data.Format(0f);
+					var vals = dp.Data.GetData();
+					dumpvals(vals);
+				}
+
+				// Bitmap preprocess
+				{
+					using (var bmp = new Bitmap((int)RawData.ImageWidth, (int)RawData.ImageHeight, PixelFormat.Format32bppArgb))
+					{
+						for (var i = 0; i < RawData.ImageHeight; ++i)
+						{
+							for (var j = 0; j < RawData.ImageWidth; ++j)
+							{
+								var value = 255 - data[current, i, j];
+								bmp.SetPixel(j, i, Color.FromArgb(value, value, value));
+							}
+						}
+
+						await ds.PreprocessImage(dp, bmp);
+					}
+
+					var vals = dp.Data.GetData();
+					dumpvals(vals);
+				}
+			}
 		}
 
 		#endregion
-
 	}
 }

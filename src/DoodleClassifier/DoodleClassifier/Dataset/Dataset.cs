@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Drawing;
 using System.Threading.Tasks;
-using GrandIntelligence;
 
 namespace DoodleClassifier
 {
 	public sealed class Dataset
 	{
-		private static Dataset Current { get; }
+		public static Dataset Current { get; }
 		static Dataset()
 		{
 			var totalDataPoints = 0ul;
@@ -69,8 +69,6 @@ namespace DoodleClassifier
 
 			if (image >= data.ImageCount) throw new IndexOutOfRangeException();
 
-			var device = Device.Active;
-
 			point.ClassString = category;
 
 			var pointdata = point.Data;
@@ -83,6 +81,30 @@ namespace DoodleClassifier
 					{
 						var index = i * RawData.ImageWidth + j;
 						buffer[index] = data[image, index] / 255f;
+					}
+				}
+
+				await pointdata.TransferAsync(buffer);
+			});
+		}
+		public async Task PreprocessImage(DataPoint point, Bitmap image)
+		{
+			if (point == null) throw new ArgumentNullException(nameof(point));
+
+			point.ClassString = null;
+
+			var pointdata = point.Data;
+
+			await Task.Run(async () =>
+			{
+				for (var i = 0; i < RawData.ImageHeight; ++i)
+				{
+					for (var j = 0; j < RawData.ImageWidth; ++j)
+					{
+						var color = image.GetPixel(j, i);
+						var value = (byte)((color.R + color.G + color.B) / 3);
+						var index = i * RawData.ImageWidth + j;
+						buffer[index] = (255 - value) / 255f;
 					}
 				}
 
