@@ -20,6 +20,7 @@ namespace DoodleClassifier
 		}
 		private void PreviewForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
+			RawData.Clean();
 			DisposeDrawing();
 			GICore.Release();
 		}
@@ -52,11 +53,11 @@ namespace DoodleClassifier
 			old?.Dispose();
 		}
 
-		private async void btnLoadData_Click(object sender, EventArgs e)
+		private void btnLoadData_Click(object sender, EventArgs e)
 		{
 			var choice = categoryChooser.ShowDialog();
 			if (choice == null) return;
-			data = await RawData.From(choice);
+			data = RawData.From(choice);
 			current = 0u;
 			DrawCurrent();
 		}
@@ -166,24 +167,7 @@ namespace DoodleClassifier
 
 		#region Dataset
 
-		private Dataset dataset = null;
-
-		private async void btnLoadDataset_Click(object sender, EventArgs e)
-		{
-			if (dataset != null) return;
-			var btn = sender as Button;
-			if (btn == null) return;
-			
-			btn.Enabled = false;
-			lblDatasetStatus.ForeColor = Color.Orange;
-			lblDatasetStatus.Text = "Loading . . .";
-
-			dataset = await Dataset.Load();
-
-			lblDatasetStatus.ForeColor = Color.Green;
-			lblDatasetStatus.Text = "Done!";
-			btn.Text = "Loaded";
-		}
+		
 
 		#endregion
 
@@ -195,5 +179,6 @@ namespace DoodleClassifier
 		}
 
 		#endregion
+
 	}
 }

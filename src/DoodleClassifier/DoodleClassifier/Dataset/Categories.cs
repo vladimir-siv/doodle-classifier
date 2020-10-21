@@ -39,6 +39,7 @@ namespace DoodleClassifier
 		public static int Count => categories.Count;
 		public static IReadOnlyList<string> Enumerate() => categories;
 
+		public static bool IsValid(string name) => oneHots.ContainsKey(name);
 		public static float[] OneHot(string name) => oneHots[name];
 		public static string From(float[] oneHot)
 		{
@@ -58,5 +59,6 @@ namespace DoodleClassifier
 
 			return categories[ind];
 		}
+		public static string RandomCategory() => categories[Extension.RandomInt(categories.Count)];
 	}
 }

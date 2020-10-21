@@ -7,6 +7,8 @@ namespace DoodleClassifier
 {
 	public static class Extension
 	{
+		private static readonly Random rng = new Random();
+		
 		/// <summary>
 		/// Resize the image to the specified width and height.
 		/// </summary>
@@ -54,5 +56,8 @@ namespace DoodleClassifier
 		{
 			return new PointF(a.X + b.X, a.Y + b.Y);
 		}
+
+		public static double RandomDouble() => rng.NextDouble();
+		public static int RandomInt(int max) => rng.Next(max);
 	}
 }

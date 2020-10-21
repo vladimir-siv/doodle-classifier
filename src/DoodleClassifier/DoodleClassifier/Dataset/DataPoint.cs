@@ -1,16 +1,40 @@
-﻿using GrandIntelligence;
+﻿using System;
+using GrandIntelligence;
 
 namespace DoodleClassifier
 {
-	public struct DataPoint
+	public class DataPoint : IDisposable
 	{
-		public Tensor Data { get; private set; }
-		public float[] Class { get; private set; }
+		public Tensor Data { get; private set; } = null;
+		public float[] Class { get; private set; } = null;
 
-		public DataPoint(Tensor data, string cls)
+		private string classString = null;
+		public string ClassString
 		{
-			Data = data;
-			Class = Categories.OneHot(cls);
+			get
+			{
+				return classString;
+			}
+			set
+			{
+				if (value == classString) return;
+				Class = Categories.OneHot(value);
+				classString = value;
+				if (classString == null) Class = null;
+			}
+		}
+
+		public DataPoint(string cls = null)
+		{
+			Data = Device.Active.Tensor(Shape.As2D(RawData.ImageHeight, RawData.ImageWidth));
+			ClassString = cls;
+		}
+
+		public void Dispose()
+		{
+			Data.Dispose();
+			Data = null;
+			ClassString = null;
 		}
 	}
 }

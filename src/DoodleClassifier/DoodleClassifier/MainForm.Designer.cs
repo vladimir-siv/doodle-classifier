@@ -41,15 +41,12 @@
 			this.pbDraw = new System.Windows.Forms.PictureBox();
 			this.btnClear = new System.Windows.Forms.Button();
 			this.gbDataset = new System.Windows.Forms.GroupBox();
-			this.btnLoadDataset = new System.Windows.Forms.Button();
-			this.lblDatasetStatus = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.pbPreview)).BeginInit();
 			this.gbDatasetDisplay.SuspendLayout();
 			this.gbTesting.SuspendLayout();
 			this.gbDrawing.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pbSaved)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbDraw)).BeginInit();
-			this.gbDataset.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnTest
@@ -66,7 +63,7 @@
 			// 
 			this.pbPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this.pbPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pbPreview.Location = new System.Drawing.Point(6, 57);
+			this.pbPreview.Location = new System.Drawing.Point(15, 51);
 			this.pbPreview.Name = "pbPreview";
 			this.pbPreview.Size = new System.Drawing.Size(84, 84);
 			this.pbPreview.TabIndex = 1;
@@ -74,7 +71,7 @@
 			// 
 			// btnNext
 			// 
-			this.btnNext.Location = new System.Drawing.Point(50, 147);
+			this.btnNext.Location = new System.Drawing.Point(59, 144);
 			this.btnNext.Name = "btnNext";
 			this.btnNext.Size = new System.Drawing.Size(40, 23);
 			this.btnNext.TabIndex = 2;
@@ -84,7 +81,7 @@
 			// 
 			// btnPrev
 			// 
-			this.btnPrev.Location = new System.Drawing.Point(6, 147);
+			this.btnPrev.Location = new System.Drawing.Point(15, 144);
 			this.btnPrev.Name = "btnPrev";
 			this.btnPrev.Size = new System.Drawing.Size(40, 23);
 			this.btnPrev.TabIndex = 1;
@@ -100,14 +97,14 @@
 			this.gbDatasetDisplay.Controls.Add(this.btnNext);
 			this.gbDatasetDisplay.Location = new System.Drawing.Point(17, 17);
 			this.gbDatasetDisplay.Name = "gbDatasetDisplay";
-			this.gbDatasetDisplay.Size = new System.Drawing.Size(96, 177);
+			this.gbDatasetDisplay.Size = new System.Drawing.Size(114, 177);
 			this.gbDatasetDisplay.TabIndex = 0;
 			this.gbDatasetDisplay.TabStop = false;
 			this.gbDatasetDisplay.Text = "Dataset Display";
 			// 
 			// btnLoadData
 			// 
-			this.btnLoadData.Location = new System.Drawing.Point(6, 22);
+			this.btnLoadData.Location = new System.Drawing.Point(15, 19);
 			this.btnLoadData.Name = "btnLoadData";
 			this.btnLoadData.Size = new System.Drawing.Size(84, 23);
 			this.btnLoadData.TabIndex = 0;
@@ -131,7 +128,7 @@
 			this.gbDrawing.Controls.Add(this.pbSaved);
 			this.gbDrawing.Controls.Add(this.pbDraw);
 			this.gbDrawing.Controls.Add(this.btnClear);
-			this.gbDrawing.Location = new System.Drawing.Point(142, 17);
+			this.gbDrawing.Location = new System.Drawing.Point(156, 17);
 			this.gbDrawing.Name = "gbDrawing";
 			this.gbDrawing.Size = new System.Drawing.Size(277, 177);
 			this.gbDrawing.TabIndex = 1;
@@ -185,33 +182,12 @@
 			// 
 			// gbDataset
 			// 
-			this.gbDataset.Controls.Add(this.lblDatasetStatus);
-			this.gbDataset.Controls.Add(this.btnLoadDataset);
-			this.gbDataset.Location = new System.Drawing.Point(448, 17);
+			this.gbDataset.Location = new System.Drawing.Point(457, 17);
 			this.gbDataset.Name = "gbDataset";
-			this.gbDataset.Size = new System.Drawing.Size(204, 177);
+			this.gbDataset.Size = new System.Drawing.Size(194, 177);
 			this.gbDataset.TabIndex = 2;
 			this.gbDataset.TabStop = false;
 			this.gbDataset.Text = "Dataset";
-			// 
-			// btnLoadDataset
-			// 
-			this.btnLoadDataset.Location = new System.Drawing.Point(15, 22);
-			this.btnLoadDataset.Name = "btnLoadDataset";
-			this.btnLoadDataset.Size = new System.Drawing.Size(75, 23);
-			this.btnLoadDataset.TabIndex = 0;
-			this.btnLoadDataset.Text = "Load";
-			this.btnLoadDataset.UseVisualStyleBackColor = true;
-			this.btnLoadDataset.Click += new System.EventHandler(this.btnLoadDataset_Click);
-			// 
-			// lblDatasetStatus
-			// 
-			this.lblDatasetStatus.AutoSize = true;
-			this.lblDatasetStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblDatasetStatus.Location = new System.Drawing.Point(125, 157);
-			this.lblDatasetStatus.Name = "lblDatasetStatus";
-			this.lblDatasetStatus.Size = new System.Drawing.Size(0, 13);
-			this.lblDatasetStatus.TabIndex = 1;
 			// 
 			// MainForm
 			// 
@@ -235,8 +211,6 @@
 			this.gbDrawing.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.pbSaved)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbDraw)).EndInit();
-			this.gbDataset.ResumeLayout(false);
-			this.gbDataset.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -256,8 +230,6 @@
 		private System.Windows.Forms.Button btnSave;
 		private System.Windows.Forms.PictureBox pbSaved;
 		private System.Windows.Forms.GroupBox gbDataset;
-		private System.Windows.Forms.Button btnLoadDataset;
-		private System.Windows.Forms.Label lblDatasetStatus;
 	}
 }
 
