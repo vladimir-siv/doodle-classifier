@@ -93,8 +93,10 @@
     <Compile Include="Boxes\CategoryChooser.Designer.cs">
       <DependentUpon>CategoryChooser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dataset\Batch.cs" />
     <Compile Include="Dataset\Categories.cs" />
     <Compile Include="Dataset\DataPoint.cs" />
+    <Compile Include="Dataset\InputDataPoint.cs" />
     <Compile Include="Dataset\Dataset.cs" />
     <Compile Include="Dataset\RawData.cs" />
     <Compile Include="Extension\Extension.cs" />

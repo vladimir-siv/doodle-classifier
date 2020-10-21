@@ -12,6 +12,7 @@ namespace DoodleClassifier
 		{
 			InitializeComponent();
 			InitializeDrawing();
+			InitializeTraining();
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
@@ -20,8 +21,16 @@ namespace DoodleClassifier
 		}
 		private void PreviewForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
+			if (AI.IsTraining)
+			{
+				MessageBox.Show("Cannot close while training is in progress. Please, stop the training first.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				e.Cancel = true;
+				return;
+			}
+
 			RawData.Clean();
 			DisposeDrawing();
+			DisposeTraining();
 			GICore.Release();
 		}
 
@@ -165,85 +174,142 @@ namespace DoodleClassifier
 
 		#endregion
 
-		#region Dataset
+		#region Training
 
-		
+		private NeuralNetwork classifier = null;
+
+		private void InitializeTraining()
+		{
+			AI.BatchEvaluation += AI_BatchEvaluation;
+		}
+		private void DisposeTraining()
+		{
+			AI.BatchEvaluation -= AI_BatchEvaluation;
+		}
+
+		private void AI_BatchEvaluation(uint batch, uint total)
+		{
+			if (InvokeRequired)
+			{
+				Invoke(new Action<uint, uint>(AI_BatchEvaluation), batch, total);
+				return;
+			}
+
+			lblTrainStatus.ForeColor = Color.DarkGoldenrod;
+			lblTrainStatus.Text = $"Evaluating batch {batch}/{total} of generation {AI.System.CurrentGeneration} . . .";
+		}
+
+		private async void btnTrain_Click(object sender, EventArgs e)
+		{
+			if (AI.IsTraining)
+			{
+				AI.StopTrain();
+			}
+			else
+			{
+				if (AI.Trained)
+				{
+					MessageBox.Show("Already trained.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+
+				if
+				(
+					!uint.TryParse(tbPopSize.Text, out var popSize)
+					||
+					!uint.TryParse(tbParentCnt.Text, out var parentCnt)
+					||
+					!float.TryParse(tbMutation.Text, out var mutationRate)
+					||
+					!uint.TryParse(tbGenerations.Text, out var generations)
+					||
+					!uint.TryParse(tbLocalBatch.Text, out var localBatch)
+					||
+					!uint.TryParse(tbGlobalBatch.Text, out var globalBatch)
+				)
+				{
+					MessageBox.Show("One or more parameters could not be parsed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+
+				btnTrain.Text = "Stop";
+
+				lblTrainStatus.ForeColor = Color.DarkCyan;
+				lblTrainStatus.Text = "Initializing . . .";
+
+				await AI.Init(popSize, parentCnt, mutationRate, generations);
+
+				lblTrainStatus.ForeColor = Color.DarkOrange;
+				lblTrainStatus.Text = "Preparing . . .";
+
+				var done = await AI.Train(localBatch, globalBatch);
+
+				if (done)
+				{
+					lblTrainStatus.ForeColor = Color.DarkGreen;
+					lblTrainStatus.Text = "Training done.";
+				}
+				else
+				{
+					lblTrainStatus.ForeColor = Color.DarkRed;
+					lblTrainStatus.Text = "Training stopped.";
+				}
+
+				classifier = AI.Best();
+
+				btnTrain.Text = "Train";
+				btnResetTrain.Enabled = true;
+			}
+		}
+
+		private void btnResetTrain_Click(object sender, EventArgs e)
+		{
+			if (!AI.Trained)
+			{
+				MessageBox.Show("Already reset.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
+
+			btnResetTrain.Enabled = false;
+
+			classifier = null;
+			AI.Dispose();
+
+			lblTrainStatus.ForeColor = Color.Brown;
+			lblTrainStatus.Text = "Training reset.";
+		}
 
 		#endregion
 
 		#region Testing
 
-		private async void btnTest_Click(object sender, EventArgs e)
+		private async void btnClassifySaved_Click(object sender, EventArgs e)
 		{
-			if (data == null)
+			if (classifier == null)
 			{
-				MessageBox.Show("Please, select an image from dataset preview.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("Please, train a classifier first, or load one.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				return;
 			}
 
-			var desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-			var log = System.IO.Path.Combine(desktop, "log.txt");
-			if (System.IO.File.Exists(log)) System.IO.File.Delete(log);
-
-			void dumpvals(params float[] values)
+			if (saved == null)
 			{
-				var sb = new System.Text.StringBuilder();
-
-				for (var i = 0; i < values.Length; ++i)
-				{
-					sb.Append($"{values[i]:0.00000000} ");
-				}
-
-				sb.AppendLine();
-
-				System.IO.File.AppendAllText(log, sb.ToString());
+				MessageBox.Show("Please, draw something, then sve it.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				return;
 			}
 
-			using (var dp = new DataPoint())
-			{
-				var ds = Dataset.Current;
+			var ds = Dataset.Surrogate;
 
-				// Zero out
-				{
-					dp.Data.Format(0f);
-					var vals = dp.Data.GetData();
-					dumpvals(vals);
-				}
+			await ds.PreprocessImage(AI.Input, saved);
 
-				// Direct preprocess
-				{
-					await ds.PreprocessImage(dp, data.Category, current);
-					var vals = dp.Data.GetData();
-					dumpvals(vals);
-				}
+			classifier.Eval(AI.Input.Data);
+			classifier.Output.Retrieve(AI.OutputBuffer);
+			var decision = Categories.From(AI.OutputBuffer);
+			lblTestStatus.Text = $"Your drawing is a(n) '{decision}'.";
+		}
 
-				// Zero out
-				{
-					dp.Data.Format(0f);
-					var vals = dp.Data.GetData();
-					dumpvals(vals);
-				}
+		private void btnTest_Click(object sender, EventArgs e)
+		{
 
-				// Bitmap preprocess
-				{
-					using (var bmp = new Bitmap((int)RawData.ImageWidth, (int)RawData.ImageHeight, PixelFormat.Format32bppArgb))
-					{
-						for (var i = 0; i < RawData.ImageHeight; ++i)
-						{
-							for (var j = 0; j < RawData.ImageWidth; ++j)
-							{
-								var value = 255 - data[current, i, j];
-								bmp.SetPixel(j, i, Color.FromArgb(value, value, value));
-							}
-						}
-
-						await ds.PreprocessImage(dp, bmp);
-					}
-
-					var vals = dp.Data.GetData();
-					dumpvals(vals);
-				}
-			}
 		}
 
 		#endregion

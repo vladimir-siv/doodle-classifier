@@ -6,7 +6,7 @@ namespace DoodleClassifier
 {
 	public sealed class Dataset
 	{
-		public static Dataset Current { get; }
+		public static Dataset Surrogate { get; }
 		static Dataset()
 		{
 			var totalDataPoints = 0ul;
@@ -17,7 +17,7 @@ namespace DoodleClassifier
 				totalDataPoints += data.ImageCount;
 			}
 
-			Current = new Dataset(totalDataPoints);
+			Surrogate = new Dataset(totalDataPoints);
 		}
 
 		private readonly float[] buffer = new float[RawData.ImageWidth * RawData.ImageHeight];
@@ -61,7 +61,7 @@ namespace DoodleClassifier
 			return traincnt + (ulong)(testcnt * Extension.RandomDouble());
 		}
 
-		public async Task PreprocessImage(DataPoint point, string category, ulong image)
+		public async Task PreprocessImage(InputDataPoint point, string category, ulong image)
 		{
 			if (point == null) throw new ArgumentNullException(nameof(point));
 
@@ -87,7 +87,7 @@ namespace DoodleClassifier
 				await pointdata.TransferAsync(buffer);
 			});
 		}
-		public async Task PreprocessImage(DataPoint point, Bitmap image)
+		public async Task PreprocessImage(InputDataPoint point, Bitmap image)
 		{
 			if (point == null) throw new ArgumentNullException(nameof(point));
 
@@ -109,6 +109,47 @@ namespace DoodleClassifier
 				}
 
 				await pointdata.TransferAsync(buffer);
+			});
+		}
+
+		public async Task RandomFillBatch(Batch batch, uint localCount, uint globalCount = 0u)
+		{
+			if (batch == null) throw new ArgumentNullException(nameof(batch));
+			if (localCount == 0u) throw new ArgumentException("Argument localCount cannot be zero.");
+			if (batch.Capacity != Categories.Count * localCount + globalCount) throw new ArgumentException("Incorrect batch size.");
+
+			await Task.Run(() =>
+			{
+				batch.Clear();
+
+				for (var i = 0u; i < localCount; ++i)
+				{
+					foreach (var category in Categories.Enumerate())
+					{
+						batch.Add
+						(
+							new DataPoint
+							(
+								category,
+								RandomTrainImage(category)
+							)
+						);
+					}
+				}
+
+				for (var i = 0u; i < globalCount; ++i)
+				{
+					var category = Categories.RandomCategory();
+
+					batch.Add
+					(
+						new DataPoint
+						(
+							category,
+							RandomTrainImage(category)
+						)
+					);
+				}
 			});
 		}
 	}
