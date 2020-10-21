@@ -61,6 +61,21 @@ namespace DoodleClassifier
 			return traincnt + (ulong)(testcnt * Extension.RandomDouble());
 		}
 
+		public ulong TestSize(string category)
+		{
+			var data = RawData.From(category);
+			var traincnt = (ulong)(data.ImageCount * TrainRatio);
+			return data.ImageCount - traincnt;
+		}
+		public DataPoint GetTestDataPoint(string category, uint index)
+		{
+			var data = RawData.From(category);
+			var traincnt = (ulong)(data.ImageCount * TrainRatio);
+			var testcnt = data.ImageCount - traincnt;
+			if (index >= testcnt) throw new IndexOutOfRangeException();
+			return new DataPoint(category, traincnt + index);
+		}
+
 		public async Task PreprocessImage(InputDataPoint point, string category, ulong image)
 		{
 			if (point == null) throw new ArgumentNullException(nameof(point));
