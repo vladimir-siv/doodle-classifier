@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DoodleClassifier
 {
@@ -11,10 +12,10 @@ namespace DoodleClassifier
 		public const uint ImageHeight = 28u;
 
 		private static readonly Dictionary<string, RawData> DataCache = new Dictionary<string, RawData>();
-		public static RawData From(string category)
+		public static async Task<RawData> From(string category)
 		{
 			if (DataCache.TryGetValue(category, out var data)) return data;
-			var bytes = ResourceManager.ReadBytes(category);
+			var bytes = await ResourceManager.ReadBytes(category);
 			var categoryData = new RawData(category, bytes);
 			DataCache.Add(category, categoryData);
 			return categoryData;

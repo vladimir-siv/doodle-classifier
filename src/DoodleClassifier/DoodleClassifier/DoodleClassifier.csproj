@@ -86,6 +86,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AI\AI.cs" />
     <Compile Include="Boxes\CategoryChooser.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,6 +94,9 @@
       <DependentUpon>CategoryChooser.cs</DependentUpon>
     </Compile>
     <Compile Include="Dataset\Categories.cs" />
+    <Compile Include="Dataset\DataPoint.cs" />
+    <Compile Include="Dataset\Dataset.cs" />
+    <Compile Include="Dataset\Preprocessing.cs" />
     <Compile Include="Dataset\RawData.cs" />
     <Compile Include="Extension\Extension.cs" />
     <Compile Include="MainForm.cs">

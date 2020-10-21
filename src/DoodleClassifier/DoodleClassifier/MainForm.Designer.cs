@@ -40,12 +40,16 @@
 			this.pbSaved = new System.Windows.Forms.PictureBox();
 			this.pbDraw = new System.Windows.Forms.PictureBox();
 			this.btnClear = new System.Windows.Forms.Button();
+			this.gbDataset = new System.Windows.Forms.GroupBox();
+			this.btnLoadDataset = new System.Windows.Forms.Button();
+			this.lblDatasetStatus = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.pbPreview)).BeginInit();
 			this.gbDatasetDisplay.SuspendLayout();
 			this.gbTesting.SuspendLayout();
 			this.gbDrawing.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pbSaved)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbDraw)).BeginInit();
+			this.gbDataset.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnTest
@@ -179,26 +183,60 @@
 			this.btnClear.UseVisualStyleBackColor = true;
 			this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
 			// 
-			// PreviewForm
+			// gbDataset
+			// 
+			this.gbDataset.Controls.Add(this.lblDatasetStatus);
+			this.gbDataset.Controls.Add(this.btnLoadDataset);
+			this.gbDataset.Location = new System.Drawing.Point(448, 17);
+			this.gbDataset.Name = "gbDataset";
+			this.gbDataset.Size = new System.Drawing.Size(204, 177);
+			this.gbDataset.TabIndex = 2;
+			this.gbDataset.TabStop = false;
+			this.gbDataset.Text = "Dataset";
+			// 
+			// btnLoadDataset
+			// 
+			this.btnLoadDataset.Location = new System.Drawing.Point(15, 22);
+			this.btnLoadDataset.Name = "btnLoadDataset";
+			this.btnLoadDataset.Size = new System.Drawing.Size(75, 23);
+			this.btnLoadDataset.TabIndex = 0;
+			this.btnLoadDataset.Text = "Load";
+			this.btnLoadDataset.UseVisualStyleBackColor = true;
+			this.btnLoadDataset.Click += new System.EventHandler(this.btnLoadDataset_Click);
+			// 
+			// lblDatasetStatus
+			// 
+			this.lblDatasetStatus.AutoSize = true;
+			this.lblDatasetStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblDatasetStatus.Location = new System.Drawing.Point(125, 157);
+			this.lblDatasetStatus.Name = "lblDatasetStatus";
+			this.lblDatasetStatus.Size = new System.Drawing.Size(0, 13);
+			this.lblDatasetStatus.TabIndex = 1;
+			// 
+			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(669, 462);
+			this.Controls.Add(this.gbDataset);
 			this.Controls.Add(this.gbDrawing);
 			this.Controls.Add(this.gbTesting);
 			this.Controls.Add(this.gbDatasetDisplay);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
-			this.Name = "PreviewForm";
+			this.Name = "MainForm";
 			this.ShowIcon = false;
 			this.Text = "NT-GI Doodle Classifier";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PreviewForm_FormClosing);
+			this.Load += new System.EventHandler(this.MainForm_Load);
 			((System.ComponentModel.ISupportInitialize)(this.pbPreview)).EndInit();
 			this.gbDatasetDisplay.ResumeLayout(false);
 			this.gbTesting.ResumeLayout(false);
 			this.gbDrawing.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.pbSaved)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbDraw)).EndInit();
+			this.gbDataset.ResumeLayout(false);
+			this.gbDataset.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -217,6 +255,9 @@
 		private System.Windows.Forms.PictureBox pbDraw;
 		private System.Windows.Forms.Button btnSave;
 		private System.Windows.Forms.PictureBox pbSaved;
+		private System.Windows.Forms.GroupBox gbDataset;
+		private System.Windows.Forms.Button btnLoadDataset;
+		private System.Windows.Forms.Label lblDatasetStatus;
 	}
 }
 

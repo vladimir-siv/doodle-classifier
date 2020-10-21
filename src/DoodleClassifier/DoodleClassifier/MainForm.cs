@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
+using GrandIntelligence;
 
 namespace DoodleClassifier
 {
@@ -13,9 +14,14 @@ namespace DoodleClassifier
 			InitializeDrawing();
 		}
 
+		private void MainForm_Load(object sender, EventArgs e)
+		{
+			GICore.Init(new Spec(DeviceType.NvidiaGpu));
+		}
 		private void PreviewForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			DisposeDrawing();
+			GICore.Release();
 		}
 
 		#region Dataset Display
@@ -29,7 +35,7 @@ namespace DoodleClassifier
 		{
 			var old = pbPreview.BackgroundImage;
 
-			using (var bmp = new Bitmap(28, 28, PixelFormat.Format32bppArgb))
+			using (var bmp = new Bitmap((int)RawData.ImageWidth, (int)RawData.ImageHeight, PixelFormat.Format32bppArgb))
 			{
 				for (var i = 0; i < RawData.ImageHeight; ++i)
 				{
@@ -46,11 +52,11 @@ namespace DoodleClassifier
 			old?.Dispose();
 		}
 
-		private void btnLoadData_Click(object sender, EventArgs e)
+		private async void btnLoadData_Click(object sender, EventArgs e)
 		{
 			var choice = categoryChooser.ShowDialog();
 			if (choice == null) return;
-			data = RawData.From(choice);
+			data = await RawData.From(choice);
 			current = 0u;
 			DrawCurrent();
 		}
@@ -154,6 +160,29 @@ namespace DoodleClassifier
 		private void pbDraw_Paint(object sender, PaintEventArgs e)
 		{
 			e.Graphics.DrawImage(drawingBmp, 0, 0);
+		}
+
+		#endregion
+
+		#region Dataset
+
+		private Dataset dataset = null;
+
+		private async void btnLoadDataset_Click(object sender, EventArgs e)
+		{
+			if (dataset != null) return;
+			var btn = sender as Button;
+			if (btn == null) return;
+			
+			btn.Enabled = false;
+			lblDatasetStatus.ForeColor = Color.Orange;
+			lblDatasetStatus.Text = "Loading . . .";
+
+			dataset = await Dataset.Load();
+
+			lblDatasetStatus.ForeColor = Color.Green;
+			lblDatasetStatus.Text = "Done!";
+			btn.Text = "Loaded";
 		}
 
 		#endregion

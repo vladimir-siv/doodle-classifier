@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DoodleClassifier
 {
@@ -22,7 +23,40 @@ namespace DoodleClassifier
 			Dogs,
 			Dragons
 		};
+		
+		private static readonly Dictionary<string, float[]> oneHots = new Dictionary<string, float[]>();
 
+		static Categories()
+		{
+			for (var i = 0; i < categories.Count; ++i)
+			{
+				var oneHot = new float[categories.Count];
+				oneHot[i] = 1f;
+				oneHots.Add(categories[i], oneHot);
+			}
+		}
+
+		public static int Count => categories.Count;
 		public static IReadOnlyList<string> Enumerate() => categories;
+
+		public static float[] OneHot(string name) => oneHots[name];
+		public static string From(float[] oneHot)
+		{
+			if (oneHot.Length != categories.Count) throw new InvalidOperationException();
+
+			var ind = -1;
+			var max = float.NegativeInfinity;
+
+			for (var i = 0; i < oneHot.Length; ++i)
+			{
+				if (oneHot[i] > max)
+				{
+					max = oneHot[i];
+					ind = i;
+				}
+			}
+
+			return categories[ind];
+		}
 	}
 }
