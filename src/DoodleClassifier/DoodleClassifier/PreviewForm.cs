@@ -13,6 +13,11 @@ namespace DoodleClassifier
 			InitializeDrawing();
 		}
 
+		private void PreviewForm_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			DisposeDrawing();
+		}
+
 		#region Dataset Display
 
 		private CategoryChooser categoryChooser = new CategoryChooser();
@@ -75,12 +80,23 @@ namespace DoodleClassifier
 		private Graphics drawingGraphics = null;
 		private Point lastPoint;
 
+		private Bitmap saved = null;
+
 		private void InitializeDrawing()
 		{
 			brushPattern = Properties.Resources.BrushPattern;
 			drawingBmp = new Bitmap(pbDraw.Width, pbDraw.Height, PixelFormat.Format32bppArgb);
 			drawingGraphics = Graphics.FromImage(drawingBmp);
 			drawingGraphics.TranslateTransform(-brushPattern.Width / 2, -brushPattern.Height / 2);
+			btnClear_Click(this, EventArgs.Empty);
+		}
+		private void DisposeDrawing()
+		{
+			drawingBmp.Dispose();
+			saved?.Dispose();
+			var old = pbSaved.BackgroundImage;
+			pbSaved.BackgroundImage = null;
+			old?.Dispose();
 		}
 
 		private void DrawLine(Point from, Point to, float delta = 1f)
@@ -111,9 +127,12 @@ namespace DoodleClassifier
 		}
 		private void btnSave_Click(object sender, EventArgs e)
 		{
+			saved?.Dispose();
+
 			var old = pbSaved.BackgroundImage;
 
-			pbSaved.BackgroundImage = drawingBmp.Resize(pbSaved.Width, pbSaved.Height);
+			saved = drawingBmp.Resize((int)RawData.ImageWidth, (int)RawData.ImageHeight);
+			pbSaved.BackgroundImage = saved.Resize(pbSaved.Width, pbSaved.Height);
 			
 			old?.Dispose();
 		}

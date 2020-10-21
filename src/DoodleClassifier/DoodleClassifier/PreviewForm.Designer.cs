@@ -36,16 +36,16 @@
 			this.btnLoadData = new System.Windows.Forms.Button();
 			this.gbTesting = new System.Windows.Forms.GroupBox();
 			this.gbDrawing = new System.Windows.Forms.GroupBox();
-			this.btnClear = new System.Windows.Forms.Button();
-			this.pbDraw = new System.Windows.Forms.PictureBox();
-			this.pbSaved = new System.Windows.Forms.PictureBox();
 			this.btnSave = new System.Windows.Forms.Button();
+			this.pbSaved = new System.Windows.Forms.PictureBox();
+			this.pbDraw = new System.Windows.Forms.PictureBox();
+			this.btnClear = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.pbPreview)).BeginInit();
 			this.gbDatasetDisplay.SuspendLayout();
 			this.gbTesting.SuspendLayout();
 			this.gbDrawing.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.pbDraw)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbSaved)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.pbDraw)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// btnTest
@@ -60,7 +60,7 @@
 			// 
 			// pbPreview
 			// 
-			this.pbPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+			this.pbPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this.pbPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.pbPreview.Location = new System.Drawing.Point(6, 57);
 			this.pbPreview.Name = "pbPreview";
@@ -134,15 +134,25 @@
 			this.gbDrawing.TabStop = false;
 			this.gbDrawing.Text = "Drawing";
 			// 
-			// btnClear
+			// btnSave
 			// 
-			this.btnClear.Location = new System.Drawing.Point(20, 22);
-			this.btnClear.Name = "btnClear";
-			this.btnClear.Size = new System.Drawing.Size(84, 23);
-			this.btnClear.TabIndex = 0;
-			this.btnClear.Text = "Clear";
-			this.btnClear.UseVisualStyleBackColor = true;
-			this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+			this.btnSave.Location = new System.Drawing.Point(20, 47);
+			this.btnSave.Name = "btnSave";
+			this.btnSave.Size = new System.Drawing.Size(84, 23);
+			this.btnSave.TabIndex = 1;
+			this.btnSave.Text = "Save";
+			this.btnSave.UseVisualStyleBackColor = true;
+			this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+			// 
+			// pbSaved
+			// 
+			this.pbSaved.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this.pbSaved.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pbSaved.Location = new System.Drawing.Point(20, 76);
+			this.pbSaved.Name = "pbSaved";
+			this.pbSaved.Size = new System.Drawing.Size(84, 84);
+			this.pbSaved.TabIndex = 3;
+			this.pbSaved.TabStop = false;
 			// 
 			// pbDraw
 			// 
@@ -159,25 +169,15 @@
 			this.pbDraw.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbDraw_MouseMove);
 			this.pbDraw.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbDraw_MouseUp);
 			// 
-			// pbSaved
+			// btnClear
 			// 
-			this.pbSaved.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-			this.pbSaved.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pbSaved.Location = new System.Drawing.Point(20, 76);
-			this.pbSaved.Name = "pbSaved";
-			this.pbSaved.Size = new System.Drawing.Size(84, 84);
-			this.pbSaved.TabIndex = 3;
-			this.pbSaved.TabStop = false;
-			// 
-			// btnSave
-			// 
-			this.btnSave.Location = new System.Drawing.Point(20, 47);
-			this.btnSave.Name = "btnSave";
-			this.btnSave.Size = new System.Drawing.Size(84, 23);
-			this.btnSave.TabIndex = 1;
-			this.btnSave.Text = "Save";
-			this.btnSave.UseVisualStyleBackColor = true;
-			this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+			this.btnClear.Location = new System.Drawing.Point(20, 22);
+			this.btnClear.Name = "btnClear";
+			this.btnClear.Size = new System.Drawing.Size(84, 23);
+			this.btnClear.TabIndex = 0;
+			this.btnClear.Text = "Clear";
+			this.btnClear.UseVisualStyleBackColor = true;
+			this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
 			// 
 			// PreviewForm
 			// 
@@ -192,12 +192,13 @@
 			this.Name = "PreviewForm";
 			this.ShowIcon = false;
 			this.Text = "NT-GI Doodle Classifier";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PreviewForm_FormClosing);
 			((System.ComponentModel.ISupportInitialize)(this.pbPreview)).EndInit();
 			this.gbDatasetDisplay.ResumeLayout(false);
 			this.gbTesting.ResumeLayout(false);
 			this.gbDrawing.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.pbDraw)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbSaved)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.pbDraw)).EndInit();
 			this.ResumeLayout(false);
 
 		}
