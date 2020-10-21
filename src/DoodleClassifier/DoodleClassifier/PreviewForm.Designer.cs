@@ -38,11 +38,14 @@
 			this.gbDrawing = new System.Windows.Forms.GroupBox();
 			this.btnClear = new System.Windows.Forms.Button();
 			this.pbDraw = new System.Windows.Forms.PictureBox();
+			this.pbSaved = new System.Windows.Forms.PictureBox();
+			this.btnSave = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.pbPreview)).BeginInit();
 			this.gbDatasetDisplay.SuspendLayout();
 			this.gbTesting.SuspendLayout();
 			this.gbDrawing.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pbDraw)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.pbSaved)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// btnTest
@@ -120,6 +123,8 @@
 			// 
 			// gbDrawing
 			// 
+			this.gbDrawing.Controls.Add(this.btnSave);
+			this.gbDrawing.Controls.Add(this.pbSaved);
 			this.gbDrawing.Controls.Add(this.pbDraw);
 			this.gbDrawing.Controls.Add(this.btnClear);
 			this.gbDrawing.Location = new System.Drawing.Point(142, 17);
@@ -133,8 +138,8 @@
 			// 
 			this.btnClear.Location = new System.Drawing.Point(20, 22);
 			this.btnClear.Name = "btnClear";
-			this.btnClear.Size = new System.Drawing.Size(82, 23);
-			this.btnClear.TabIndex = 1;
+			this.btnClear.Size = new System.Drawing.Size(84, 23);
+			this.btnClear.TabIndex = 0;
 			this.btnClear.Text = "Clear";
 			this.btnClear.UseVisualStyleBackColor = true;
 			this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
@@ -150,7 +155,29 @@
 			this.pbDraw.TabIndex = 2;
 			this.pbDraw.TabStop = false;
 			this.pbDraw.Paint += new System.Windows.Forms.PaintEventHandler(this.pbDraw_Paint);
+			this.pbDraw.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbDraw_MouseDown);
 			this.pbDraw.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbDraw_MouseMove);
+			this.pbDraw.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbDraw_MouseUp);
+			// 
+			// pbSaved
+			// 
+			this.pbSaved.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+			this.pbSaved.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pbSaved.Location = new System.Drawing.Point(20, 76);
+			this.pbSaved.Name = "pbSaved";
+			this.pbSaved.Size = new System.Drawing.Size(84, 84);
+			this.pbSaved.TabIndex = 3;
+			this.pbSaved.TabStop = false;
+			// 
+			// btnSave
+			// 
+			this.btnSave.Location = new System.Drawing.Point(20, 47);
+			this.btnSave.Name = "btnSave";
+			this.btnSave.Size = new System.Drawing.Size(84, 23);
+			this.btnSave.TabIndex = 1;
+			this.btnSave.Text = "Save";
+			this.btnSave.UseVisualStyleBackColor = true;
+			this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
 			// 
 			// PreviewForm
 			// 
@@ -170,6 +197,7 @@
 			this.gbTesting.ResumeLayout(false);
 			this.gbDrawing.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.pbDraw)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.pbSaved)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -186,6 +214,8 @@
 		private System.Windows.Forms.GroupBox gbDrawing;
 		private System.Windows.Forms.Button btnClear;
 		private System.Windows.Forms.PictureBox pbDraw;
+		private System.Windows.Forms.Button btnSave;
+		private System.Windows.Forms.PictureBox pbSaved;
 	}
 }
 

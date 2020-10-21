@@ -24,18 +24,19 @@ namespace DoodleClassifier
 		{
 			var old = pbPreview.BackgroundImage;
 
-			var bmp = new Bitmap(28, 28, PixelFormat.Format32bppArgb);
-
-			for (var i = 0; i < RawData.ImageHeight; ++i)
+			using (var bmp = new Bitmap(28, 28, PixelFormat.Format32bppArgb))
 			{
-				for (var j = 0; j < RawData.ImageWidth; ++j)
+				for (var i = 0; i < RawData.ImageHeight; ++i)
 				{
-					var value = 255 - data[current, i, j];
-					bmp.SetPixel(j, i, Color.FromArgb(value, value, value));
+					for (var j = 0; j < RawData.ImageWidth; ++j)
+					{
+						var value = 255 - data[current, i, j];
+						bmp.SetPixel(j, i, Color.FromArgb(value, value, value));
+					}
 				}
-			}
 
-			pbPreview.BackgroundImage = bmp;
+				pbPreview.BackgroundImage = bmp.Resize(pbPreview.Width, pbPreview.Height);
+			}
 
 			old?.Dispose();
 		}
@@ -69,31 +70,68 @@ namespace DoodleClassifier
 
 		#region Drawing
 
+		private Bitmap brushPattern = null;
 		private Bitmap drawingBmp = null;
 		private Graphics drawingGraphics = null;
-		private Brush drawingBrush = null;
+		private Point lastPoint;
 
 		private void InitializeDrawing()
 		{
-			drawingBmp = new Bitmap(140, 140, PixelFormat.Format32bppArgb);
+			brushPattern = Properties.Resources.BrushPattern;
+			drawingBmp = new Bitmap(pbDraw.Width, pbDraw.Height, PixelFormat.Format32bppArgb);
 			drawingGraphics = Graphics.FromImage(drawingBmp);
-			drawingBrush = new SolidBrush(Color.Black);
-			btnClear_Click(this, EventArgs.Empty);
+			drawingGraphics.TranslateTransform(-brushPattern.Width / 2, -brushPattern.Height / 2);
+		}
+
+		private void DrawLine(Point from, Point to, float delta = 1f)
+		{
+			var f = new PointF(from.X, from.Y);
+			var t = new PointF(to.X, to.Y);
+
+			var dist = Extension.Distance(f, t);
+			var steps = (uint)Math.Ceiling(dist / delta);
+			delta = dist / steps;
+
+			var vec = Extension.Vector(f, t, delta);
+			var current = f;
+
+			for (var i = 0u; i <= steps; ++i)
+			{
+				drawingGraphics.DrawImage(brushPattern, current);
+				current = Extension.Add(current, vec);
+			}
+
+			pbDraw.Invalidate();
 		}
 
 		private void btnClear_Click(object sender, EventArgs e)
 		{
 			drawingGraphics.Clear(Color.White);
-			pbDraw.Refresh();
+			pbDraw.Invalidate();
+		}
+		private void btnSave_Click(object sender, EventArgs e)
+		{
+			var old = pbSaved.BackgroundImage;
+
+			pbSaved.BackgroundImage = drawingBmp.Resize(pbSaved.Width, pbSaved.Height);
+			
+			old?.Dispose();
 		}
 
+		private void pbDraw_MouseDown(object sender, MouseEventArgs e)
+		{
+			lastPoint = e.Location;
+		}
 		private void pbDraw_MouseMove(object sender, MouseEventArgs e)
 		{
-			if (!e.Button.HasFlag(MouseButtons.Left)) return;
-			drawingGraphics.FillEllipse(drawingBrush, e.X, e.Y, 6, 6);
-			pbDraw.Refresh();
+			if (e.Button != MouseButtons.Left) return;
+			DrawLine(lastPoint, e.Location);
+			lastPoint = e.Location;
 		}
-
+		private void pbDraw_MouseUp(object sender, MouseEventArgs e)
+		{
+			DrawLine(lastPoint, e.Location);
+		}
 		private void pbDraw_Paint(object sender, PaintEventArgs e)
 		{
 			e.Graphics.DrawImage(drawingBmp, 0, 0);
