@@ -9,7 +9,7 @@ namespace DoodleClassifier
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new PreviewForm());
+			Application.Run(new MainForm());
 		}
 	}
 }

@@ -5,9 +5,9 @@ using System.Windows.Forms;
 
 namespace DoodleClassifier
 {
-	public partial class PreviewForm : Form
+	public partial class MainForm : Form
 	{
-		public PreviewForm()
+		public MainForm()
 		{
 			InitializeComponent();
 			InitializeDrawing();

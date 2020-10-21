@@ -1,6 +1,6 @@
 ﻿namespace DoodleClassifier
 {
-	partial class PreviewForm
+	partial class MainForm
 	{
 		/// <summary>
 		/// Required designer variable.
