@@ -13,10 +13,7 @@ namespace DoodleClassifier
 			InitializeComponent();
 			InitializeDrawing();
 			InitializeTraining();
-		}
-
-		private void MainForm_Load(object sender, EventArgs e)
-		{
+			InitializeTesting();
 			GICore.Init(new Spec(DeviceType.NvidiaGpu));
 		}
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -31,6 +28,7 @@ namespace DoodleClassifier
 			RawData.Clean();
 			DisposeDrawing();
 			DisposeTraining();
+			DisposeTesting();
 			GICore.Release();
 		}
 
@@ -258,7 +256,7 @@ namespace DoodleClassifier
 				classifier = AI.Best();
 
 				btnTrain.Text = "Train";
-				btnResetTrain.Enabled = true;
+				btnSaveClassifier.Enabled = btnResetTrain.Enabled = true;
 			}
 		}
 
@@ -270,7 +268,7 @@ namespace DoodleClassifier
 				return;
 			}
 
-			btnResetTrain.Enabled = false;
+			btnSaveClassifier.Enabled = btnResetTrain.Enabled = false;
 
 			classifier = null;
 			AI.Dispose();
@@ -279,13 +277,44 @@ namespace DoodleClassifier
 			lblTrainStatus.Text = "Training reset.";
 		}
 
+		private void btnSaveClassifier_Click(object sender, EventArgs e)
+		{
+
+		}
+
 		#endregion
 
 		#region Testing
 
+		private NeuralNetwork loaded = null;
+
+		private void InitializeTesting()
+		{
+
+		}
+		private void DisposeTesting()
+		{
+			loaded?.Dispose();
+			loaded = null;
+		}
+
+		private NeuralNetwork ChooseNetwork()
+		{
+			if (classifier == null && loaded == null) throw new InvalidOperationException();
+			if (loaded == null) return classifier;
+			if (classifier == null) return loaded;
+			if (cbUseLoaded.Checked) return loaded;
+			else return classifier;
+		}
+
+		private void btnTest_Click(object sender, EventArgs e)
+		{
+
+		}
+
 		private async void btnClassifySaved_Click(object sender, EventArgs e)
 		{
-			if (classifier == null)
+			if (classifier == null || loaded == null)
 			{
 				MessageBox.Show("Please, train a classifier first, or load one.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				return;
@@ -297,17 +326,18 @@ namespace DoodleClassifier
 				return;
 			}
 
-			var ds = Dataset.Surrogate;
+			var network = ChooseNetwork();
 
+			var ds = Dataset.Surrogate;
 			await ds.PreprocessImage(AI.Input, saved);
 
-			classifier.Eval(AI.Input.Data);
-			classifier.Output.Retrieve(AI.OutputBuffer);
+			network.Eval(AI.Input.Data);
+			network.Output.Retrieve(AI.OutputBuffer);
 			var decision = Categories.From(AI.OutputBuffer);
 			lblTestStatus.Text = $"Your drawing is a(n) '{decision}'.";
 		}
 
-		private void btnTest_Click(object sender, EventArgs e)
+		private void btnClassifierLoading_Click(object sender, EventArgs e)
 		{
 
 		}
