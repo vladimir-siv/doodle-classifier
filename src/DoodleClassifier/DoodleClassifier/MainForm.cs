@@ -19,7 +19,7 @@ namespace DoodleClassifier
 		{
 			GICore.Init(new Spec(DeviceType.NvidiaGpu));
 		}
-		private void PreviewForm_FormClosing(object sender, FormClosingEventArgs e)
+		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			if (AI.IsTraining)
 			{
@@ -310,6 +310,18 @@ namespace DoodleClassifier
 		private void btnTest_Click(object sender, EventArgs e)
 		{
 
+		}
+
+		#endregion
+
+		#region Dataset
+
+		private void tbDatasetRatio_ValueChanged(object sender, EventArgs e)
+		{
+			var ds = Dataset.Surrogate;
+			var val = tbDatasetRatio.Value;
+			lblDatasetRatio.Text = $"Train/Test ratio: {val}%";
+			ds.TrainRatio = val / 100.0;
 		}
 
 		#endregion
