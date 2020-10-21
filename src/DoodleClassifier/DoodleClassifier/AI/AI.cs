@@ -133,12 +133,10 @@ namespace DoodleClassifier
 
 		public static DarwinBgea System { get; private set; } = null;
 		public static InputDataPoint Input { get; private set; } = null;
-
-		public static bool IsTraining { get; private set; } = false;
-		public static bool Trained { get; private set; } = false;
+		public static Batch Batch { get; private set; } = null;
 
 		public static event Action EvaluationPrepared;
-		public static event Action<uint, uint> BatchEvaluation;
+		public static event Action<uint, uint, uint, uint> PointEvaluated;
 		public static event Action PopulationEvaluated;
 
 		#endregion
@@ -188,10 +186,10 @@ namespace DoodleClassifier
 
 		public static void Dispose()
 		{
-			Trained = false;
-
 			brainPrototype?.Dispose();
 			brainPrototype = null;
+
+			Batch = null;
 
 			Input?.Dispose();
 			Input = null;
@@ -219,10 +217,12 @@ namespace DoodleClassifier
 			for (var p = 0u; p < batch.Count; ++p)
 			{
 				if (stopTrain) break;
-				BatchEvaluation?.Invoke(p, batch.Count);
 
 				var dp = batch[p];
 				await ds.PreprocessImage(Input, dp.Category, dp.Image);
+
+				var hits = 0u;
+				var misses = 0u;
 
 				for (var i = 0u; i < population.Size; ++i)
 				{
@@ -234,11 +234,20 @@ namespace DoodleClassifier
 
 					var progress = OutputClassification[(int)i];
 
-					if (decision == Input.ClassString) progress = (progress.Item1 + 1u, progress.Item2);
-					else progress = (progress.Item1, progress.Item2 + 1u);
+					var hit = 0u;
+					var miss = 0u;
+
+					if (decision == Input.ClassString) ++hit;
+					else ++miss;
+
+					progress = (progress.Item1 + hit, progress.Item2 + miss);
+					hits += hit;
+					misses += miss;
 
 					OutputClassification[(int)i] = progress;
 				}
+
+				PointEvaluated?.Invoke(hits, misses, p, batch.Count);
 			}
 
 			for (var i = 0u; i < population.Size; ++i)
@@ -257,32 +266,28 @@ namespace DoodleClassifier
 		public static async Task<bool> Train(uint localCount, uint globalCount = 0u)
 		{
 			if (System == null) throw new InvalidOperationException();
-
-			if (Trained) return false;
-			Trained = true;
-
+			if (Batch != null) throw new InvalidOperationException();
+			
 			stopTrain = false;
-			IsTraining = true;
 
 			await Task.Run(async () =>
 			{
-				var batch = new Batch(Categories.Count * localCount + globalCount);
+				Batch = new Batch(Categories.Count * localCount + globalCount);
 				var ds = Dataset.Surrogate;
 
 				do
 				{
 					if (stopTrain) break;
 					var population = System.Generation;
-					await ds.RandomFillBatch(batch, localCount, globalCount);
+					await ds.RandomFillBatch(Batch, localCount, globalCount);
 					EvaluationPrepared?.Invoke();
-					await EvaluatePopulation(population, batch);
+					await EvaluatePopulation(population, Batch);
 					if (stopTrain) break;
 					PopulationEvaluated?.Invoke();
 				}
 				while (System.Cycle());
 			});
 
-			IsTraining = false;
 			return !stopTrain;
 		}
 

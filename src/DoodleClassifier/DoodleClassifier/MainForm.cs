@@ -18,7 +18,7 @@ namespace DoodleClassifier
 		}
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			if (AI.IsTraining)
+			if (training)
 			{
 				MessageBox.Show("Cannot close while training is in progress. Please, stop the training first.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				e.Cancel = true;
@@ -175,42 +175,37 @@ namespace DoodleClassifier
 		#region Training
 
 		private NeuralNetwork classifier = null;
+		private bool training = false;
 
 		private void InitializeTraining()
 		{
-			AI.BatchEvaluation += AI_BatchEvaluation;
+			AI.PointEvaluated += AI_PointEvaluated;
 		}
 		private void DisposeTraining()
 		{
-			AI.BatchEvaluation -= AI_BatchEvaluation;
+			AI.PointEvaluated -= AI_PointEvaluated;
 		}
 
-		private void AI_BatchEvaluation(uint batch, uint total)
+		private void AI_PointEvaluated(uint hits, uint misses, uint point, uint total)
 		{
 			if (InvokeRequired)
 			{
-				Invoke(new Action<uint, uint>(AI_BatchEvaluation), batch, total);
+				Invoke(new Action<uint, uint, uint, uint>(AI_PointEvaluated), hits, misses, point, total);
 				return;
 			}
 
 			lblTrainStatus.ForeColor = Color.DarkGoldenrod;
-			lblTrainStatus.Text = $"Evaluating batch {batch}/{total} of generation {AI.System.CurrentGeneration} . . .";
+			lblTrainStatus.Text = $"Batch [{point + 1u}/{total}] of Gen [{AI.System.CurrentGeneration}/{AI.System.Generations}] -> Hits: [{hits}/{hits + misses}] Misses: [{misses}/{hits + misses}]";
 		}
 
 		private async void btnTrain_Click(object sender, EventArgs e)
 		{
-			if (AI.IsTraining)
+			if (training)
 			{
 				AI.StopTrain();
 			}
 			else
 			{
-				if (AI.Trained)
-				{
-					MessageBox.Show("Already trained.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					return;
-				}
-
 				if
 				(
 					!uint.TryParse(tbPopSize.Text, out var popSize)
@@ -229,6 +224,8 @@ namespace DoodleClassifier
 					MessageBox.Show("One or more parameters could not be parsed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				}
+
+				training = true;
 
 				btnTrain.Text = "Stop";
 
@@ -253,22 +250,20 @@ namespace DoodleClassifier
 					lblTrainStatus.Text = "Training stopped.";
 				}
 
-				classifier = AI.Best();
-
 				btnTrain.Text = "Train";
+				btnTrain.Enabled = false;
 				btnSaveClassifier.Enabled = btnResetTrain.Enabled = true;
+
+				training = false;
+
+				classifier = AI.Best();
 			}
 		}
 
 		private void btnResetTrain_Click(object sender, EventArgs e)
 		{
-			if (!AI.Trained)
-			{
-				MessageBox.Show("Already reset.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return;
-			}
-
 			btnSaveClassifier.Enabled = btnResetTrain.Enabled = false;
+			btnTrain.Enabled = true;
 
 			classifier = null;
 			AI.Dispose();
@@ -314,7 +309,7 @@ namespace DoodleClassifier
 
 		private async void btnClassifySaved_Click(object sender, EventArgs e)
 		{
-			if (classifier == null || loaded == null)
+			if (classifier == null && loaded == null)
 			{
 				MessageBox.Show("Please, train a classifier first, or load one.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				return;
