@@ -1,7 +1,27 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DoodleClassifier.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Device" Type="System.String" Scope="User">
+      <Value Profile="(Default)">NvidiaGpu</Value>
+    </Setting>
+    <Setting Name="Location" Type="System.String" Scope="User">
+      <Value Profile="(Default)">S:\#DATASETS\GQuickDraw\</Value>
+    </Setting>
+    <Setting Name="Format" Type="System.String" Scope="User">
+      <Value Profile="(Default)">full_numpy_bitmap_{0}.npy</Value>
+    </Setting>
+    <Setting Name="Categories" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;airplane&lt;/string&gt;
+  &lt;string&gt;angel&lt;/string&gt;
+  &lt;string&gt;apple&lt;/string&gt;
+  &lt;string&gt;banana&lt;/string&gt;
+  &lt;string&gt;cat&lt;/string&gt;
+  &lt;string&gt;dog&lt;/string&gt;
+  &lt;string&gt;dragon&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

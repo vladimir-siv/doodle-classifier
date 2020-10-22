@@ -1,34 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace DoodleClassifier
 {
 	public static class Categories
 	{
-		public const string Airplanes = "airplane";
-		public const string Angels = "angel";
-		public const string Apples = "apple";
-		public const string Bananas = "banana";
-		public const string Cats = "cat";
-		public const string Dogs = "dog";
-		public const string Dragons = "dragon";
-
-		private static readonly List<string> categories = new List<string>()
-		{
-			Airplanes,
-			Angels,
-			Apples,
-			Bananas,
-			Cats,
-			Dogs,
-			Dragons
-		};
+		private static readonly List<string> categories = new List<string>();
 		
 		private static readonly Dictionary<string, float[]> oneHots = new Dictionary<string, float[]>();
 		private static readonly Dictionary<string, uint> indices = new Dictionary<string, uint>();
 
 		static Categories()
 		{
+			var classes = Properties.Settings.Default.Categories;
+
+			for (var i = 0; i < classes.Count; ++i)
+			{
+				var path = ResourceManager.GetResourcePath(classes[i]);
+				if (!File.Exists(path)) throw new ApplicationException($"Category '{classes[i]}' dataset file not found.");
+				categories.Add(classes[i]);
+			}
+
 			for (var i = 0; i < categories.Count; ++i)
 			{
 				var oneHot = new float[categories.Count];

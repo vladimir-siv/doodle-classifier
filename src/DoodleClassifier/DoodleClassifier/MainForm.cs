@@ -23,16 +23,27 @@ namespace DoodleClassifier
 
 		public MainForm()
 		{
-			GICore.Init(new Spec(DeviceType.NvidiaGpu));
+			Application.ThreadException += Application_ThreadException;
+			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+			if
+			(
+				!Enum.TryParse<DeviceType>
+				(
+					Properties.Settings.Default.Device,
+					true,
+					out var type
+				)
+			)
+				throw new ApplicationException("Unknown device type supplied in app.config.");
+			
+			GICore.Init(new Spec(type));
 			InitializeComponent();
 			InitializeDatasetDisplay();
 			InitializeDrawing();
 			InitializeTraining();
 			InitializeTesting();
 			InitializeDataset();
-
-			Application.ThreadException += Application_ThreadException;
-			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 		}
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{

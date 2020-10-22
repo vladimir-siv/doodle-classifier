@@ -143,7 +143,7 @@ namespace DoodleClassifier
 
 		#region Initialization
 
-		public static async Task Init(uint populationSize = 100u, uint parentCount = 2u, float mutationRate = 5.0f, uint generations = 100u)
+		public static async Task Init(uint populationSize = 100u, uint parentCount = 1u, float mutationRate = 10.0f, uint generations = 100u)
 		{
 			if (System != null) return;
 

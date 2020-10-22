@@ -35,6 +35,7 @@
 			this.gbDatasetDisplay = new System.Windows.Forms.GroupBox();
 			this.btnLoadData = new System.Windows.Forms.Button();
 			this.gbTesting = new System.Windows.Forms.GroupBox();
+			this.nudDataCount = new System.Windows.Forms.NumericUpDown();
 			this.cbUseLoaded = new System.Windows.Forms.CheckBox();
 			this.btnClassifierLoading = new System.Windows.Forms.Button();
 			this.lblTestStatus = new System.Windows.Forms.Label();
@@ -65,17 +66,16 @@
 			this.lblTotal = new System.Windows.Forms.Label();
 			this.lblDatasetRatio = new System.Windows.Forms.Label();
 			this.tbDatasetRatio = new System.Windows.Forms.TrackBar();
-			this.nudDataCount = new System.Windows.Forms.NumericUpDown();
 			((System.ComponentModel.ISupportInitialize)(this.pbPreview)).BeginInit();
 			this.gbDatasetDisplay.SuspendLayout();
 			this.gbTesting.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudDataCount)).BeginInit();
 			this.gbDrawing.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pbSaved)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbDraw)).BeginInit();
 			this.gbTraining.SuspendLayout();
 			this.gbDataset.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.tbDatasetRatio)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.nudDataCount)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// btnTest
@@ -155,6 +155,23 @@
 			this.gbTesting.TabIndex = 3;
 			this.gbTesting.TabStop = false;
 			this.gbTesting.Text = "Testing";
+			// 
+			// nudDataCount
+			// 
+			this.nudDataCount.Location = new System.Drawing.Point(164, 26);
+			this.nudDataCount.Maximum = new decimal(new int[] {
+            1410065407,
+            2,
+            0,
+            0});
+			this.nudDataCount.Name = "nudDataCount";
+			this.nudDataCount.Size = new System.Drawing.Size(75, 20);
+			this.nudDataCount.TabIndex = 2;
+			this.nudDataCount.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
 			// 
 			// cbUseLoaded
 			// 
@@ -381,7 +398,7 @@
 			this.tbMutation.Name = "tbMutation";
 			this.tbMutation.Size = new System.Drawing.Size(100, 20);
 			this.tbMutation.TabIndex = 5;
-			this.tbMutation.Text = "5.0";
+			this.tbMutation.Text = "10.0";
 			// 
 			// lblMutation
 			// 
@@ -398,7 +415,7 @@
 			this.tbParentCnt.Name = "tbParentCnt";
 			this.tbParentCnt.Size = new System.Drawing.Size(100, 20);
 			this.tbParentCnt.TabIndex = 3;
-			this.tbParentCnt.Text = "2";
+			this.tbParentCnt.Text = "1";
 			// 
 			// lblParentCnt
 			// 
@@ -468,23 +485,6 @@
 			this.tbDatasetRatio.Value = 95;
 			this.tbDatasetRatio.ValueChanged += new System.EventHandler(this.tbDatasetRatio_ValueChanged);
 			// 
-			// nudDataCount
-			// 
-			this.nudDataCount.Location = new System.Drawing.Point(164, 26);
-			this.nudDataCount.Maximum = new decimal(new int[] {
-            1410065407,
-            2,
-            0,
-            0});
-			this.nudDataCount.Name = "nudDataCount";
-			this.nudDataCount.Size = new System.Drawing.Size(75, 20);
-			this.nudDataCount.TabIndex = 2;
-			this.nudDataCount.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -506,6 +506,7 @@
 			this.gbDatasetDisplay.ResumeLayout(false);
 			this.gbTesting.ResumeLayout(false);
 			this.gbTesting.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudDataCount)).EndInit();
 			this.gbDrawing.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.pbSaved)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbDraw)).EndInit();
@@ -514,7 +515,6 @@
 			this.gbDataset.ResumeLayout(false);
 			this.gbDataset.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.tbDatasetRatio)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.nudDataCount)).EndInit();
 			this.ResumeLayout(false);
 
 		}
