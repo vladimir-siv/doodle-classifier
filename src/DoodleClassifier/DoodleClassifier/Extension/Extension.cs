@@ -9,6 +9,8 @@ namespace DoodleClassifier
 	{
 		private static readonly Random rng = new Random();
 		
+		public static readonly string Desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+		
 		/// <summary>
 		/// Resize the image to the specified width and height.
 		/// </summary>

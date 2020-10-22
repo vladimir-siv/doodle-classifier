@@ -1,20 +1,25 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 using GrandIntelligence;
 
 namespace DoodleClassifier
 {
 	public partial class MainForm : Form
 	{
+		private readonly OpenFileDialog ofd = new OpenFileDialog { InitialDirectory = Extension.Desktop };
+		private readonly SaveFileDialog sfd = new SaveFileDialog { InitialDirectory = Extension.Desktop };
+
 		public MainForm()
 		{
+			GICore.Init(new Spec(DeviceType.NvidiaGpu));
 			InitializeComponent();
 			InitializeDrawing();
 			InitializeTraining();
 			InitializeTesting();
-			GICore.Init(new Spec(DeviceType.NvidiaGpu));
 		}
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
@@ -195,7 +200,7 @@ namespace DoodleClassifier
 			}
 
 			lblTrainStatus.ForeColor = Color.DarkGoldenrod;
-			lblTrainStatus.Text = $"Batch [{point + 1u}/{total}] of Gen [{AI.System.CurrentGeneration}/{AI.System.Generations}] -> Hits: [{hits}/{hits + misses}] Misses: [{misses}/{hits + misses}]";
+			lblTrainStatus.Text = $"Point [{point + 1u}/{total}] of Gen [{AI.System.CurrentGeneration}/{AI.System.Generations}] -> Hits: [{hits}/{hits + misses}] Misses: [{misses}/{hits + misses}]";
 		}
 
 		private async void btnTrain_Click(object sender, EventArgs e)
@@ -272,9 +277,40 @@ namespace DoodleClassifier
 			lblTrainStatus.Text = "Training reset.";
 		}
 
-		private void btnSaveClassifier_Click(object sender, EventArgs e)
+		private async void btnSaveClassifier_Click(object sender, EventArgs e)
 		{
+			sfd.Title = "Save network";
+			sfd.Filter = "Convolutional Network | *.cnn";
+			sfd.DefaultExt = ".cnn";
 
+			if (sfd.ShowDialog() != DialogResult.OK) return;
+
+			lblTrainStatus.ForeColor = Color.DarkOrange;
+			lblTrainStatus.Text = "Saving . . .";
+
+			await Task.Run(() =>
+			{
+				using (var stream = new StreamWriter(sfd.FileName))
+				using (var it = new NeuralIterator())
+				{
+					for (var param = it.Begin(classifier); param != null; param = it.Next())
+					{
+						stream.Write($"{it.CurrentParam}:");
+
+						var data = param.GetData();
+
+						for (var i = 0u; i < data.Length; ++i)
+						{
+							stream.Write($" {data[i]}");
+						}
+
+						stream.WriteLine();
+					}
+				}
+			});
+
+			lblTrainStatus.ForeColor = Color.DarkGreen;
+			lblTrainStatus.Text = "Saved!";
 		}
 
 		#endregion
@@ -282,15 +318,19 @@ namespace DoodleClassifier
 		#region Testing
 
 		private NeuralNetwork loaded = null;
+		private InputDataPoint input = null;
 
 		private void InitializeTesting()
 		{
-
+			input = new InputDataPoint();
 		}
 		private void DisposeTesting()
 		{
 			loaded?.Dispose();
 			loaded = null;
+
+			input?.Dispose();
+			input = null;
 		}
 
 		private NeuralNetwork ChooseNetwork()
@@ -317,24 +357,106 @@ namespace DoodleClassifier
 
 			if (saved == null)
 			{
-				MessageBox.Show("Please, draw something, then sve it.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				MessageBox.Show("Please, draw something, then save it.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				return;
 			}
 
 			var network = ChooseNetwork();
 
 			var ds = Dataset.Surrogate;
-			await ds.PreprocessImage(AI.Input, saved);
+			await ds.PreprocessImage(input, saved);
 
-			network.Eval(AI.Input.Data);
+			network.Eval(input.Data);
 			network.Output.Retrieve(AI.OutputBuffer);
 			var decision = Categories.From(AI.OutputBuffer);
 			lblTestStatus.Text = $"Your drawing is a(n) '{decision}'.";
 		}
 
-		private void btnClassifierLoading_Click(object sender, EventArgs e)
+		private async void btnClassifierLoading_Click(object sender, EventArgs e)
 		{
+			if (loaded == null)
+			{
+				ofd.Title = "Open network";
+				ofd.Filter = "Convolutional Network | *.cnn";
+				ofd.DefaultExt = ".cnn";
 
+				if (ofd.ShowDialog() != DialogResult.OK) return;
+
+				lblTestStatus.ForeColor = Color.DarkOrange;
+				lblTestStatus.Text = "Loading . . .";
+
+				btnClassifierLoading.Enabled = false;
+
+				loaded = await Task.Run(() =>
+				{
+					try
+					{
+						var lines = File.ReadAllLines(ofd.FileName);
+
+						var vals = new float[lines.Length][];
+
+						for (var ln = 0; ln < lines.Length; ++ln)
+						{
+							var line = lines[ln];
+
+							var s1 = line.Split(':');
+
+							var i = Convert.ToUInt32(s1[0]);
+
+							var svals = s1[1].Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+							vals[i] = new float[svals.Length];
+
+							for (var v = 0u; v < svals.Length; ++v)
+							{
+								vals[i][v] = Convert.ToSingle(svals[v]);
+							}
+						}
+
+						loaded = AI.BrainPrototype.Compile();
+
+						using (var it = new NeuralIterator())
+						{
+							for (var param = it.Begin(loaded); param != null; param = it.Next())
+							{
+								param.Transfer(vals[it.CurrentParam]);
+							}
+						}
+					}
+					catch
+					{
+						loaded?.Dispose();
+						loaded = null;
+					}
+
+					return loaded;
+				});
+
+				if (loaded != null)
+				{
+					btnClassifierLoading.Text = "Unload";
+					btnClassifierLoading.Enabled = true;
+					cbUseLoaded.Enabled = true;
+
+					lblTestStatus.ForeColor = Color.DarkGreen;
+					lblTestStatus.Text = "Done!";
+				}
+				else
+				{
+					btnClassifierLoading.Enabled = true;
+
+					lblTestStatus.ForeColor = Color.DarkRed;
+					lblTestStatus.Text = "Failed to load the file!";
+				}
+			}
+			else
+			{
+				loaded.Dispose();
+				loaded = null;
+
+				btnClassifierLoading.Text = "Load";
+				cbUseLoaded.Enabled = false;
+			}
 		}
 
 		#endregion
