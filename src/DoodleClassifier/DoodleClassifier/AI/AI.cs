@@ -10,12 +10,12 @@ namespace DoodleClassifier
 	{
 		#region Utility
 
-		private static List<(uint, uint)> outputClassification = null;
-		public static List<(uint, uint)> OutputClassification
+		private static List<(uint[], uint, uint)> outputClassification = null;
+		public static List<(uint[], uint, uint)> OutputClassification
 		{
 			get
 			{
-				if (outputClassification == null) outputClassification = new List<(uint, uint)>();
+				if (outputClassification == null) outputClassification = new List<(uint[], uint, uint)>();
 				return outputClassification;
 			}
 		}
@@ -211,7 +211,7 @@ namespace DoodleClassifier
 
 			for (var i = 0u; i < population.Size; ++i)
 			{
-				OutputClassification.Add((0u, 0u));
+				OutputClassification.Add((new uint[Categories.Count], 0u, 0u));
 			}
 
 			EvaluationPrepare?.Invoke();
@@ -240,10 +240,15 @@ namespace DoodleClassifier
 					var hit = 0u;
 					var miss = 0u;
 
-					if (predicted == Input.ClassString) ++hit;
+					if (predicted == Input.ClassString)
+					{
+						var c = Categories.IndexOf(Input.ClassString);
+						++progress.Item1[c];
+						++hit;
+					}
 					else ++miss;
 
-					progress = (progress.Item1 + hit, progress.Item2 + miss);
+					progress = (progress.Item1, progress.Item2 + hit, progress.Item3 + miss);
 					hits += hit;
 
 					OutputClassification[(int)i] = progress;
@@ -259,9 +264,12 @@ namespace DoodleClassifier
 			{
 				var brain = (BasicBrain)population[i];
 				var progress = OutputClassification[(int)i];
+				var hits = progress.Item2;
+				var misses = progress.Item3;
+				var hitvar = progress.Item1.Variance();
 
-				var reward = Math.Pow(progress.Item1, 4.0);
-				var penalty = Math.Pow(progress.Item2 / 10.0, 2.0);
+				var reward = Math.Pow(hits, 3.0);
+				var penalty = Math.Pow(hitvar * 10.0, 2.0) + Math.Pow(misses / 10.0, 2.0);
 
 				var evalue = (float)(reward - penalty);
 				if (evalue < 1e-8f) evalue = 1e-8f;

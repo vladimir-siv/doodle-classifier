@@ -61,5 +61,25 @@ namespace DoodleClassifier
 
 		public static double RandomDouble() => rng.NextDouble();
 		public static int RandomInt(int max) => rng.Next(max);
+
+		public static double Variance(this uint[] array)
+		{
+			var mean = 0.0;
+			for (var i = 0u; i < array.Length; ++i)
+			{
+				mean += array[i];
+			}
+			mean /= array.Length;
+
+			var variance = 0.0;
+			for (var i = 0u; i < array.Length; ++i)
+			{
+				var diff = array[i] - mean;
+				variance += diff * diff;
+			}
+			variance /= array.Length;
+
+			return variance;
+		}
 	}
 }
