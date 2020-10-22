@@ -220,15 +220,32 @@ namespace DoodleClassifier
 		private NeuralNetwork classifier = null;
 		private bool training = false;
 
+		private FitnessFunction func = null;
+		private FitnessEditor funceditor = null;
+
 		private void InitializeTraining()
 		{
 			AI.PointEvaluated += AI_PointEvaluated;
 			AI.PopulationEvaluated += AI_PopulationEvaluated;
+
+			func = new FitnessFunction();
+			funceditor = new FitnessEditor();
+
+			tbFitness.Text = func.ToString();
 		}
 		private void DisposeTraining()
 		{
 			AI.PointEvaluated -= AI_PointEvaluated;
 			AI.PopulationEvaluated -= AI_PopulationEvaluated;
+
+			funceditor?.Dispose();
+			funceditor = null;
+			func = null;
+		}
+
+		private void tbFitness_DoubleClick(object sender, EventArgs e)
+		{
+			funceditor.Edit(func);
 		}
 
 		private void AI_PointEvaluated(uint hits, uint total, uint point, uint size)
@@ -295,7 +312,7 @@ namespace DoodleClassifier
 				lblTrainStatus.ForeColor = Color.DarkOrange;
 				lblTrainStatus.Text = "Preparing . . .";
 
-				var done = await AI.Train(localBatch, globalBatch);
+				var done = await AI.Train(func, localBatch, globalBatch);
 
 				if (done)
 				{

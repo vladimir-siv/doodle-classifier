@@ -220,7 +220,7 @@ namespace DoodleClassifier
 
 		private static bool stopTrain = false;
 
-		private static async Task EvaluatePopulation(Population population, Batch batch)
+		private static async Task EvaluatePopulation(Population population, FitnessFunction func, Batch batch)
 		{
 			var ds = Dataset.Surrogate;
 			OutputClassification.Clear();
@@ -280,27 +280,21 @@ namespace DoodleClassifier
 			{
 				var brain = (BasicBrain)population[i];
 				var progress = OutputClassification[(int)i];
-				var hits = progress.Item2;
-				var misses = progress.Item3;
-				var hitvar = progress.Item1.Variance();
-
-				var reward = Math.Pow(hits, 3.0);
-				var penalty = Math.Pow(hitvar * 10.0, 2.0) + Math.Pow(misses / 10.0, 2.0);
-
-				var evalue = (float)(reward - penalty);
+				var evalue = func.Calculate(progress.Item1, progress.Item2, progress.Item3);
 				if (evalue < 1e-8f) evalue = 1e-8f;
-
 				brain.EvolutionValue = evalue;
 			}
 
 			PopulationEvaluated?.Invoke(totalhits, totalevals);
 		}
 
-		public static async Task<bool> Train(uint localCount, uint globalCount = 0u)
+		public static async Task<bool> Train(FitnessFunction func, uint localCount, uint globalCount = 0u)
 		{
+			if (func == null) throw new ArgumentNullException(nameof(func));
+
 			if (System == null) throw new InvalidOperationException();
 			if (Batch != null) throw new InvalidOperationException();
-			
+
 			stopTrain = false;
 
 			await Task.Run(async () =>
@@ -313,7 +307,7 @@ namespace DoodleClassifier
 					if (stopTrain) break;
 					var population = System.Generation;
 					await ds.RandomFillBatch(Batch, localCount, globalCount);
-					await EvaluatePopulation(population, Batch);
+					await EvaluatePopulation(population, func, Batch);
 					if (stopTrain) break;
 				}
 				while (System.Cycle());

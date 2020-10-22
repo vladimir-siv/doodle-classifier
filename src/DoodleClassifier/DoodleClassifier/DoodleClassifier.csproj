@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AI\AI.cs" />
+    <Compile Include="AI\FitnessFunction.cs" />
     <Compile Include="Boxes\CategoryChooser.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,6 +104,12 @@
     <Compile Include="Dataset\Dataset.cs" />
     <Compile Include="Dataset\RawData.cs" />
     <Compile Include="Extension\Extension.cs" />
+    <Compile Include="FitnessEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FitnessEditor.Designer.cs">
+      <DependentUpon>FitnessEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -120,6 +127,9 @@
     </Compile>
     <EmbeddedResource Include="Boxes\CategoryChooser.resx">
       <DependentUpon>CategoryChooser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FitnessEditor.resx">
+      <DependentUpon>FitnessEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

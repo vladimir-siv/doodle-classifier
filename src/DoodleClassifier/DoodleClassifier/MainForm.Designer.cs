@@ -46,6 +46,10 @@
 			this.pbDraw = new System.Windows.Forms.PictureBox();
 			this.btnClear = new System.Windows.Forms.Button();
 			this.gbTraining = new System.Windows.Forms.GroupBox();
+			this.tbFitness = new System.Windows.Forms.TextBox();
+			this.lblFitness = new System.Windows.Forms.Label();
+			this.lblCrossover = new System.Windows.Forms.Label();
+			this.cbCrossover = new System.Windows.Forms.ComboBox();
 			this.btnSaveClassifier = new System.Windows.Forms.Button();
 			this.lblTrainStatus = new System.Windows.Forms.Label();
 			this.tbGenerations = new System.Windows.Forms.TextBox();
@@ -66,8 +70,6 @@
 			this.lblTotal = new System.Windows.Forms.Label();
 			this.lblDatasetRatio = new System.Windows.Forms.Label();
 			this.tbDatasetRatio = new System.Windows.Forms.TrackBar();
-			this.cbCrossover = new System.Windows.Forms.ComboBox();
-			this.lblCrossover = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.pbPreview)).BeginInit();
 			this.gbDatasetDisplay.SuspendLayout();
 			this.gbTesting.SuspendLayout();
@@ -278,6 +280,8 @@
 			// 
 			// gbTraining
 			// 
+			this.gbTraining.Controls.Add(this.tbFitness);
+			this.gbTraining.Controls.Add(this.lblFitness);
 			this.gbTraining.Controls.Add(this.lblCrossover);
 			this.gbTraining.Controls.Add(this.cbCrossover);
 			this.gbTraining.Controls.Add(this.btnSaveClassifier);
@@ -303,13 +307,54 @@
 			this.gbTraining.TabStop = false;
 			this.gbTraining.Text = "Training";
 			// 
+			// tbFitness
+			// 
+			this.tbFitness.Cursor = System.Windows.Forms.Cursors.Default;
+			this.tbFitness.Location = new System.Drawing.Point(296, 85);
+			this.tbFitness.Name = "tbFitness";
+			this.tbFitness.ReadOnly = true;
+			this.tbFitness.Size = new System.Drawing.Size(100, 20);
+			this.tbFitness.TabIndex = 11;
+			this.tbFitness.DoubleClick += new System.EventHandler(this.tbFitness_DoubleClick);
+			// 
+			// lblFitness
+			// 
+			this.lblFitness.AutoSize = true;
+			this.lblFitness.Location = new System.Drawing.Point(247, 88);
+			this.lblFitness.Name = "lblFitness";
+			this.lblFitness.Size = new System.Drawing.Size(43, 13);
+			this.lblFitness.TabIndex = 10;
+			this.lblFitness.Text = "Fitness:";
+			// 
+			// lblCrossover
+			// 
+			this.lblCrossover.AutoSize = true;
+			this.lblCrossover.Location = new System.Drawing.Point(39, 88);
+			this.lblCrossover.Name = "lblCrossover";
+			this.lblCrossover.Size = new System.Drawing.Size(57, 13);
+			this.lblCrossover.TabIndex = 8;
+			this.lblCrossover.Text = "Crossover:";
+			// 
+			// cbCrossover
+			// 
+			this.cbCrossover.FormattingEnabled = true;
+			this.cbCrossover.Items.AddRange(new object[] {
+            "RUC",
+            "RFC",
+            "SEC"});
+			this.cbCrossover.Location = new System.Drawing.Point(104, 85);
+			this.cbCrossover.Name = "cbCrossover";
+			this.cbCrossover.Size = new System.Drawing.Size(100, 21);
+			this.cbCrossover.TabIndex = 9;
+			this.cbCrossover.Text = "SEC";
+			// 
 			// btnSaveClassifier
 			// 
 			this.btnSaveClassifier.Enabled = false;
 			this.btnSaveClassifier.Location = new System.Drawing.Point(264, 148);
 			this.btnSaveClassifier.Name = "btnSaveClassifier";
 			this.btnSaveClassifier.Size = new System.Drawing.Size(104, 23);
-			this.btnSaveClassifier.TabIndex = 16;
+			this.btnSaveClassifier.TabIndex = 18;
 			this.btnSaveClassifier.Text = "Save";
 			this.btnSaveClassifier.UseVisualStyleBackColor = true;
 			this.btnSaveClassifier.Click += new System.EventHandler(this.btnSaveClassifier_Click);
@@ -322,7 +367,7 @@
 			this.lblTrainStatus.Location = new System.Drawing.Point(17, 182);
 			this.lblTrainStatus.Name = "lblTrainStatus";
 			this.lblTrainStatus.Size = new System.Drawing.Size(0, 13);
-			this.lblTrainStatus.TabIndex = 17;
+			this.lblTrainStatus.TabIndex = 19;
 			// 
 			// tbGenerations
 			// 
@@ -347,7 +392,7 @@
 			this.btnResetTrain.Location = new System.Drawing.Point(154, 148);
 			this.btnResetTrain.Name = "btnResetTrain";
 			this.btnResetTrain.Size = new System.Drawing.Size(104, 23);
-			this.btnResetTrain.TabIndex = 15;
+			this.btnResetTrain.TabIndex = 17;
 			this.btnResetTrain.Text = "Reset";
 			this.btnResetTrain.UseVisualStyleBackColor = true;
 			this.btnResetTrain.Click += new System.EventHandler(this.btnResetTrain_Click);
@@ -357,7 +402,7 @@
 			this.btnTrain.Location = new System.Drawing.Point(44, 148);
 			this.btnTrain.Name = "btnTrain";
 			this.btnTrain.Size = new System.Drawing.Size(104, 23);
-			this.btnTrain.TabIndex = 14;
+			this.btnTrain.TabIndex = 16;
 			this.btnTrain.Text = "Train";
 			this.btnTrain.UseVisualStyleBackColor = true;
 			this.btnTrain.Click += new System.EventHandler(this.btnTrain_Click);
@@ -367,7 +412,7 @@
 			this.tbGlobalBatch.Location = new System.Drawing.Point(296, 114);
 			this.tbGlobalBatch.Name = "tbGlobalBatch";
 			this.tbGlobalBatch.Size = new System.Drawing.Size(100, 20);
-			this.tbGlobalBatch.TabIndex = 13;
+			this.tbGlobalBatch.TabIndex = 15;
 			this.tbGlobalBatch.Text = "4";
 			// 
 			// lblGlobalBatch
@@ -376,7 +421,7 @@
 			this.lblGlobalBatch.Location = new System.Drawing.Point(220, 117);
 			this.lblGlobalBatch.Name = "lblGlobalBatch";
 			this.lblGlobalBatch.Size = new System.Drawing.Size(70, 13);
-			this.lblGlobalBatch.TabIndex = 12;
+			this.lblGlobalBatch.TabIndex = 14;
 			this.lblGlobalBatch.Text = "Global batch:";
 			// 
 			// tbLocalBatch
@@ -384,7 +429,7 @@
 			this.tbLocalBatch.Location = new System.Drawing.Point(104, 114);
 			this.tbLocalBatch.Name = "tbLocalBatch";
 			this.tbLocalBatch.Size = new System.Drawing.Size(100, 20);
-			this.tbLocalBatch.TabIndex = 11;
+			this.tbLocalBatch.TabIndex = 13;
 			this.tbLocalBatch.Text = "4";
 			// 
 			// lblLocalBatch
@@ -393,7 +438,7 @@
 			this.lblLocalBatch.Location = new System.Drawing.Point(32, 117);
 			this.lblLocalBatch.Name = "lblLocalBatch";
 			this.lblLocalBatch.Size = new System.Drawing.Size(66, 13);
-			this.lblLocalBatch.TabIndex = 10;
+			this.lblLocalBatch.TabIndex = 12;
 			this.lblLocalBatch.Text = "Local batch:";
 			// 
 			// tbMutation
@@ -489,28 +534,6 @@
 			this.tbDatasetRatio.Value = 95;
 			this.tbDatasetRatio.ValueChanged += new System.EventHandler(this.tbDatasetRatio_ValueChanged);
 			// 
-			// cbCrossover
-			// 
-			this.cbCrossover.FormattingEnabled = true;
-			this.cbCrossover.Items.AddRange(new object[] {
-            "RUC",
-            "RFC",
-            "SEC"});
-			this.cbCrossover.Location = new System.Drawing.Point(104, 85);
-			this.cbCrossover.Name = "cbCrossover";
-			this.cbCrossover.Size = new System.Drawing.Size(100, 21);
-			this.cbCrossover.TabIndex = 9;
-			this.cbCrossover.Text = "SEC";
-			// 
-			// lblCrossover
-			// 
-			this.lblCrossover.AutoSize = true;
-			this.lblCrossover.Location = new System.Drawing.Point(39, 88);
-			this.lblCrossover.Name = "lblCrossover";
-			this.lblCrossover.Size = new System.Drawing.Size(57, 13);
-			this.lblCrossover.TabIndex = 8;
-			this.lblCrossover.Text = "Crossover:";
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -587,6 +610,8 @@
 		private System.Windows.Forms.NumericUpDown nudDataCount;
 		private System.Windows.Forms.Label lblCrossover;
 		private System.Windows.Forms.ComboBox cbCrossover;
+		private System.Windows.Forms.TextBox tbFitness;
+		private System.Windows.Forms.Label lblFitness;
 	}
 }
 
