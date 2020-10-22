@@ -46,14 +46,14 @@
 			this.dgvDisplay.ReadOnly = true;
 			this.dgvDisplay.RowHeadersVisible = false;
 			this.dgvDisplay.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-			this.dgvDisplay.Size = new System.Drawing.Size(463, 426);
+			this.dgvDisplay.Size = new System.Drawing.Size(459, 420);
 			this.dgvDisplay.TabIndex = 0;
 			// 
 			// TestForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(463, 426);
+			this.ClientSize = new System.Drawing.Size(459, 420);
 			this.Controls.Add(this.dgvDisplay);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;

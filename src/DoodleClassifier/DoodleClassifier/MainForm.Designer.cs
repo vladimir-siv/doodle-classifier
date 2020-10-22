@@ -35,6 +35,8 @@
 			this.gbDatasetDisplay = new System.Windows.Forms.GroupBox();
 			this.btnLoadData = new System.Windows.Forms.Button();
 			this.gbTesting = new System.Windows.Forms.GroupBox();
+			this.cbUseLoaded = new System.Windows.Forms.CheckBox();
+			this.btnClassifierLoading = new System.Windows.Forms.Button();
 			this.lblTestStatus = new System.Windows.Forms.Label();
 			this.btnClassifySaved = new System.Windows.Forms.Button();
 			this.gbDrawing = new System.Windows.Forms.GroupBox();
@@ -43,6 +45,7 @@
 			this.pbDraw = new System.Windows.Forms.PictureBox();
 			this.btnClear = new System.Windows.Forms.Button();
 			this.gbTraining = new System.Windows.Forms.GroupBox();
+			this.btnSaveClassifier = new System.Windows.Forms.Button();
 			this.lblTrainStatus = new System.Windows.Forms.Label();
 			this.tbGenerations = new System.Windows.Forms.TextBox();
 			this.lblGenerations = new System.Windows.Forms.Label();
@@ -59,12 +62,10 @@
 			this.tbPopSize = new System.Windows.Forms.TextBox();
 			this.lblPopSize = new System.Windows.Forms.Label();
 			this.gbDataset = new System.Windows.Forms.GroupBox();
-			this.tbDatasetRatio = new System.Windows.Forms.TrackBar();
-			this.lblDatasetRatio = new System.Windows.Forms.Label();
-			this.btnSaveClassifier = new System.Windows.Forms.Button();
-			this.btnClassifierLoading = new System.Windows.Forms.Button();
-			this.cbUseLoaded = new System.Windows.Forms.CheckBox();
 			this.lblTotal = new System.Windows.Forms.Label();
+			this.lblDatasetRatio = new System.Windows.Forms.Label();
+			this.tbDatasetRatio = new System.Windows.Forms.TrackBar();
+			this.nudDataCount = new System.Windows.Forms.NumericUpDown();
 			((System.ComponentModel.ISupportInitialize)(this.pbPreview)).BeginInit();
 			this.gbDatasetDisplay.SuspendLayout();
 			this.gbTesting.SuspendLayout();
@@ -74,6 +75,7 @@
 			this.gbTraining.SuspendLayout();
 			this.gbDataset.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.tbDatasetRatio)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.nudDataCount)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// btnTest
@@ -141,6 +143,7 @@
 			// 
 			// gbTesting
 			// 
+			this.gbTesting.Controls.Add(this.nudDataCount);
 			this.gbTesting.Controls.Add(this.cbUseLoaded);
 			this.gbTesting.Controls.Add(this.btnClassifierLoading);
 			this.gbTesting.Controls.Add(this.lblTestStatus);
@@ -153,6 +156,29 @@
 			this.gbTesting.TabStop = false;
 			this.gbTesting.Text = "Testing";
 			// 
+			// cbUseLoaded
+			// 
+			this.cbUseLoaded.AutoSize = true;
+			this.cbUseLoaded.Checked = true;
+			this.cbUseLoaded.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbUseLoaded.Enabled = false;
+			this.cbUseLoaded.Location = new System.Drawing.Point(163, 86);
+			this.cbUseLoaded.Name = "cbUseLoaded";
+			this.cbUseLoaded.Size = new System.Drawing.Size(80, 17);
+			this.cbUseLoaded.TabIndex = 4;
+			this.cbUseLoaded.Text = "Use loaded";
+			this.cbUseLoaded.UseVisualStyleBackColor = true;
+			// 
+			// btnClassifierLoading
+			// 
+			this.btnClassifierLoading.Location = new System.Drawing.Point(164, 53);
+			this.btnClassifierLoading.Name = "btnClassifierLoading";
+			this.btnClassifierLoading.Size = new System.Drawing.Size(75, 23);
+			this.btnClassifierLoading.TabIndex = 3;
+			this.btnClassifierLoading.Text = "Load";
+			this.btnClassifierLoading.UseVisualStyleBackColor = true;
+			this.btnClassifierLoading.Click += new System.EventHandler(this.btnClassifierLoading_Click);
+			// 
 			// lblTestStatus
 			// 
 			this.lblTestStatus.AutoSize = true;
@@ -161,7 +187,7 @@
 			this.lblTestStatus.Location = new System.Drawing.Point(24, 86);
 			this.lblTestStatus.Name = "lblTestStatus";
 			this.lblTestStatus.Size = new System.Drawing.Size(0, 13);
-			this.lblTestStatus.TabIndex = 2;
+			this.lblTestStatus.TabIndex = 5;
 			// 
 			// btnClassifySaved
 			// 
@@ -255,6 +281,17 @@
 			this.gbTraining.TabIndex = 2;
 			this.gbTraining.TabStop = false;
 			this.gbTraining.Text = "Training";
+			// 
+			// btnSaveClassifier
+			// 
+			this.btnSaveClassifier.Enabled = false;
+			this.btnSaveClassifier.Location = new System.Drawing.Point(264, 118);
+			this.btnSaveClassifier.Name = "btnSaveClassifier";
+			this.btnSaveClassifier.Size = new System.Drawing.Size(104, 23);
+			this.btnSaveClassifier.TabIndex = 14;
+			this.btnSaveClassifier.Text = "Save";
+			this.btnSaveClassifier.UseVisualStyleBackColor = true;
+			this.btnSaveClassifier.Click += new System.EventHandler(this.btnSaveClassifier_Click);
 			// 
 			// lblTrainStatus
 			// 
@@ -401,6 +438,24 @@
 			this.gbDataset.TabStop = false;
 			this.gbDataset.Text = "Dataset";
 			// 
+			// lblTotal
+			// 
+			this.lblTotal.AutoSize = true;
+			this.lblTotal.Location = new System.Drawing.Point(17, 88);
+			this.lblTotal.Name = "lblTotal";
+			this.lblTotal.Size = new System.Drawing.Size(95, 13);
+			this.lblTotal.TabIndex = 2;
+			this.lblTotal.Text = "Dataset size: 0000";
+			// 
+			// lblDatasetRatio
+			// 
+			this.lblDatasetRatio.AutoSize = true;
+			this.lblDatasetRatio.Location = new System.Drawing.Point(17, 69);
+			this.lblDatasetRatio.Name = "lblDatasetRatio";
+			this.lblDatasetRatio.Size = new System.Drawing.Size(106, 13);
+			this.lblDatasetRatio.TabIndex = 1;
+			this.lblDatasetRatio.Text = "Train/Test ratio: 95%";
+			// 
 			// tbDatasetRatio
 			// 
 			this.tbDatasetRatio.Location = new System.Drawing.Point(20, 22);
@@ -413,57 +468,27 @@
 			this.tbDatasetRatio.Value = 95;
 			this.tbDatasetRatio.ValueChanged += new System.EventHandler(this.tbDatasetRatio_ValueChanged);
 			// 
-			// lblDatasetRatio
+			// nudDataCount
 			// 
-			this.lblDatasetRatio.AutoSize = true;
-			this.lblDatasetRatio.Location = new System.Drawing.Point(17, 69);
-			this.lblDatasetRatio.Name = "lblDatasetRatio";
-			this.lblDatasetRatio.Size = new System.Drawing.Size(106, 13);
-			this.lblDatasetRatio.TabIndex = 1;
-			this.lblDatasetRatio.Text = "Train/Test ratio: 95%";
-			// 
-			// btnSaveClassifier
-			// 
-			this.btnSaveClassifier.Enabled = false;
-			this.btnSaveClassifier.Location = new System.Drawing.Point(264, 118);
-			this.btnSaveClassifier.Name = "btnSaveClassifier";
-			this.btnSaveClassifier.Size = new System.Drawing.Size(104, 23);
-			this.btnSaveClassifier.TabIndex = 14;
-			this.btnSaveClassifier.Text = "Save";
-			this.btnSaveClassifier.UseVisualStyleBackColor = true;
-			this.btnSaveClassifier.Click += new System.EventHandler(this.btnSaveClassifier_Click);
-			// 
-			// btnClassifierLoading
-			// 
-			this.btnClassifierLoading.Location = new System.Drawing.Point(163, 24);
-			this.btnClassifierLoading.Name = "btnClassifierLoading";
-			this.btnClassifierLoading.Size = new System.Drawing.Size(75, 23);
-			this.btnClassifierLoading.TabIndex = 3;
-			this.btnClassifierLoading.Text = "Load";
-			this.btnClassifierLoading.UseVisualStyleBackColor = true;
-			this.btnClassifierLoading.Click += new System.EventHandler(this.btnClassifierLoading_Click);
-			// 
-			// cbUseLoaded
-			// 
-			this.cbUseLoaded.AutoSize = true;
-			this.cbUseLoaded.Checked = true;
-			this.cbUseLoaded.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbUseLoaded.Enabled = false;
-			this.cbUseLoaded.Location = new System.Drawing.Point(162, 57);
-			this.cbUseLoaded.Name = "cbUseLoaded";
-			this.cbUseLoaded.Size = new System.Drawing.Size(80, 17);
-			this.cbUseLoaded.TabIndex = 4;
-			this.cbUseLoaded.Text = "Use loaded";
-			this.cbUseLoaded.UseVisualStyleBackColor = true;
-			// 
-			// lblTotal
-			// 
-			this.lblTotal.AutoSize = true;
-			this.lblTotal.Location = new System.Drawing.Point(17, 88);
-			this.lblTotal.Name = "lblTotal";
-			this.lblTotal.Size = new System.Drawing.Size(95, 13);
-			this.lblTotal.TabIndex = 2;
-			this.lblTotal.Text = "Dataset size: 0000";
+			this.nudDataCount.Location = new System.Drawing.Point(164, 26);
+			this.nudDataCount.Maximum = new decimal(new int[] {
+            1410065407,
+            2,
+            0,
+            0});
+			this.nudDataCount.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+			this.nudDataCount.Name = "nudDataCount";
+			this.nudDataCount.Size = new System.Drawing.Size(75, 20);
+			this.nudDataCount.TabIndex = 2;
+			this.nudDataCount.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
 			// 
 			// MainForm
 			// 
@@ -494,6 +519,7 @@
 			this.gbDataset.ResumeLayout(false);
 			this.gbDataset.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.tbDatasetRatio)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.nudDataCount)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -537,6 +563,7 @@
 		private System.Windows.Forms.Button btnClassifierLoading;
 		private System.Windows.Forms.CheckBox cbUseLoaded;
 		private System.Windows.Forms.Label lblTotal;
+		private System.Windows.Forms.NumericUpDown nudDataCount;
 	}
 }
 

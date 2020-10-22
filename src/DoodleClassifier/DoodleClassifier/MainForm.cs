@@ -374,7 +374,7 @@ namespace DoodleClassifier
 			lblTestStatus.ForeColor = Color.DarkOrange;
 			lblTestStatus.Text = "Evaluating. Please wait . . .";
 
-			await new TestForm(network, name).Evaluate();
+			await new TestForm(name).Evaluate(network, (uint)nudDataCount.Value);
 
 			lblTestStatus.ForeColor = Color.DarkGreen;
 			lblTestStatus.Text = "Evaluation done!";
