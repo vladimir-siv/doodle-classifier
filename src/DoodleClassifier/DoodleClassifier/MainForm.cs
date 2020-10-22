@@ -223,22 +223,35 @@ namespace DoodleClassifier
 		private void InitializeTraining()
 		{
 			AI.PointEvaluated += AI_PointEvaluated;
+			AI.PopulationEvaluated += AI_PopulationEvaluated;
 		}
 		private void DisposeTraining()
 		{
 			AI.PointEvaluated -= AI_PointEvaluated;
+			AI.PopulationEvaluated -= AI_PopulationEvaluated;
 		}
 
-		private void AI_PointEvaluated(uint hits, uint misses, uint point, uint total)
+		private void AI_PointEvaluated(uint hits, uint total, uint point, uint size)
 		{
 			if (InvokeRequired)
 			{
-				Invoke(new Action<uint, uint, uint, uint>(AI_PointEvaluated), hits, misses, point, total);
+				Invoke(new Action<uint, uint, uint, uint>(AI_PointEvaluated), hits, total, point, size);
 				return;
 			}
 
 			lblTrainStatus.ForeColor = Color.DarkGoldenrod;
-			lblTrainStatus.Text = $"Point [{point + 1u}/{total}] of Gen [{AI.System.CurrentGeneration}/{AI.System.Generations}] -> Hits: [{hits}/{hits + misses}] Misses: [{misses}/{hits + misses}]";
+			lblTrainStatus.Text = $"Point [{point + 1u}/{size}] of Gen [{AI.System.CurrentGeneration}/{AI.System.Generations}] -> Hits: [{hits}/{total}] Misses: [{total - hits}/{total}]";
+		}
+		private void AI_PopulationEvaluated(uint hits, uint total)
+		{
+			if (InvokeRequired)
+			{
+				Invoke(new Action<uint, uint>(AI_PopulationEvaluated), hits, total);
+				return;
+			}
+
+			lblTrainStatus.ForeColor = Color.DarkCyan;
+			lblTrainStatus.Text = $"Gen [{AI.System.CurrentGeneration}/{AI.System.Generations}] -> Hits: [{hits}/{total}] Misses: [{total - hits}/{total}]";
 		}
 
 		private async void btnTrain_Click(object sender, EventArgs e)

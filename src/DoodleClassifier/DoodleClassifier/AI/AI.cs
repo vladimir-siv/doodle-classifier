@@ -135,9 +135,9 @@ namespace DoodleClassifier
 		public static InputDataPoint Input { get; private set; } = null;
 		public static Batch Batch { get; private set; } = null;
 
-		public static event Action EvaluationPrepared;
+		public static event Action EvaluationPrepare;
 		public static event Action<uint, uint, uint, uint> PointEvaluated;
-		public static event Action PopulationEvaluated;
+		public static event Action<uint, uint> PopulationEvaluated;
 
 		#endregion
 
@@ -214,6 +214,11 @@ namespace DoodleClassifier
 				OutputClassification.Add((0u, 0u));
 			}
 
+			EvaluationPrepare?.Invoke();
+
+			var totalhits = 0u;
+			var totalevals = 0u;
+
 			for (var p = 0u; p < batch.Count; ++p)
 			{
 				if (stopTrain) break;
@@ -221,7 +226,6 @@ namespace DoodleClassifier
 				await ds.PreprocessImage(Input, batch[p]);
 
 				var hits = 0u;
-				var misses = 0u;
 
 				for (var i = 0u; i < population.Size; ++i)
 				{
@@ -241,12 +245,14 @@ namespace DoodleClassifier
 
 					progress = (progress.Item1 + hit, progress.Item2 + miss);
 					hits += hit;
-					misses += miss;
 
 					OutputClassification[(int)i] = progress;
 				}
 
-				PointEvaluated?.Invoke(hits, misses, p, batch.Count);
+				totalhits += hits;
+				totalevals += population.Size;
+
+				PointEvaluated?.Invoke(hits, population.Size, p, batch.Count);
 			}
 
 			for (var i = 0u; i < population.Size; ++i)
@@ -262,6 +268,8 @@ namespace DoodleClassifier
 
 				brain.EvolutionValue = evalue;
 			}
+
+			PopulationEvaluated?.Invoke(totalhits, totalevals);
 		}
 
 		public static async Task<bool> Train(uint localCount, uint globalCount = 0u)
@@ -281,10 +289,8 @@ namespace DoodleClassifier
 					if (stopTrain) break;
 					var population = System.Generation;
 					await ds.RandomFillBatch(Batch, localCount, globalCount);
-					EvaluationPrepared?.Invoke();
 					await EvaluatePopulation(population, Batch);
 					if (stopTrain) break;
-					PopulationEvaluated?.Invoke();
 				}
 				while (System.Cycle());
 			});
