@@ -76,15 +76,15 @@ namespace DoodleClassifier
 			return new DataPoint(category, traincnt + index);
 		}
 
-		public async Task PreprocessImage(InputDataPoint point, string category, ulong image)
+		public async Task PreprocessImage(InputDataPoint point, DataPoint dp)
 		{
 			if (point == null) throw new ArgumentNullException(nameof(point));
 
-			var data = RawData.From(category);
+			var data = RawData.From(dp.Category);
 
-			if (image >= data.ImageCount) throw new IndexOutOfRangeException();
+			if (dp.Image >= data.ImageCount) throw new IndexOutOfRangeException();
 
-			point.ClassString = category;
+			point.ClassString = dp.Category;
 
 			var pointdata = point.Data;
 
@@ -95,7 +95,7 @@ namespace DoodleClassifier
 					for (var j = 0u; j < RawData.ImageWidth; ++j)
 					{
 						var index = i * RawData.ImageWidth + j;
-						buffer[index] = data[image, index] / 255f;
+						buffer[index] = data[dp.Image, index] / 255f;
 					}
 				}
 

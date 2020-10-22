@@ -218,8 +218,7 @@ namespace DoodleClassifier
 			{
 				if (stopTrain) break;
 
-				var dp = batch[p];
-				await ds.PreprocessImage(Input, dp.Category, dp.Image);
+				await ds.PreprocessImage(Input, batch[p]);
 
 				var hits = 0u;
 				var misses = 0u;
@@ -230,14 +229,14 @@ namespace DoodleClassifier
 					brain.NeuralNetwork.Eval(Input.Data);
 					brain.NeuralNetwork.Output.Retrieve(OutputBuffer);
 
-					var decision = Categories.From(OutputBuffer);
+					var predicted = Categories.From(OutputBuffer);
 
 					var progress = OutputClassification[(int)i];
 
 					var hit = 0u;
 					var miss = 0u;
 
-					if (decision == Input.ClassString) ++hit;
+					if (predicted == Input.ClassString) ++hit;
 					else ++miss;
 
 					progress = (progress.Item1 + hit, progress.Item2 + miss);

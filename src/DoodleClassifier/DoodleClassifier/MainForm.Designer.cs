@@ -476,11 +476,6 @@
             2,
             0,
             0});
-			this.nudDataCount.Minimum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
 			this.nudDataCount.Name = "nudDataCount";
 			this.nudDataCount.Size = new System.Drawing.Size(75, 20);
 			this.nudDataCount.TabIndex = 2;

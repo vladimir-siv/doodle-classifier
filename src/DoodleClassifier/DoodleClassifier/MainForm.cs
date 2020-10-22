@@ -372,7 +372,7 @@ namespace DoodleClassifier
 			evaluating = true;
 
 			lblTestStatus.ForeColor = Color.DarkOrange;
-			lblTestStatus.Text = "Evaluating. Please wait . . .";
+			lblTestStatus.Text = "Please wait . . .";
 
 			await new TestForm(name).Evaluate(network, (uint)nudDataCount.Value);
 
@@ -404,8 +404,8 @@ namespace DoodleClassifier
 
 			network.Eval(input.Data);
 			network.Output.Retrieve(AI.OutputBuffer);
-			var decision = Categories.From(AI.OutputBuffer);
-			lblTestStatus.Text = $"Your drawing is a(n) '{decision}'.";
+			var predicted = Categories.From(AI.OutputBuffer);
+			lblTestStatus.Text = $"'{predicted}'!";
 		}
 
 		private async void btnClassifierLoading_Click(object sender, EventArgs e)
@@ -482,7 +482,7 @@ namespace DoodleClassifier
 					btnClassifierLoading.Enabled = true;
 
 					lblTestStatus.ForeColor = Color.DarkRed;
-					lblTestStatus.Text = "Failed to load the file!";
+					lblTestStatus.Text = "Loading failed!";
 				}
 			}
 			else

@@ -25,6 +25,7 @@ namespace DoodleClassifier
 		};
 		
 		private static readonly Dictionary<string, float[]> oneHots = new Dictionary<string, float[]>();
+		private static readonly Dictionary<string, uint> indices = new Dictionary<string, uint>();
 
 		static Categories()
 		{
@@ -33,6 +34,7 @@ namespace DoodleClassifier
 				var oneHot = new float[categories.Count];
 				oneHot[i] = 1f;
 				oneHots.Add(categories[i], oneHot);
+				indices.Add(categories[i], (uint)i);
 			}
 		}
 
@@ -41,6 +43,7 @@ namespace DoodleClassifier
 
 		public static bool IsValid(string name) => oneHots.ContainsKey(name);
 		public static float[] OneHot(string name) => oneHots[name];
+		public static uint IndexOf(string name) => indices[name];
 		public static string From(float[] oneHot)
 		{
 			if (oneHot.Length != categories.Count) throw new InvalidOperationException();
