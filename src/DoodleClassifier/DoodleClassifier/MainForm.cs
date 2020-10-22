@@ -246,6 +246,7 @@ namespace DoodleClassifier
 		private void tbFitness_DoubleClick(object sender, EventArgs e)
 		{
 			funceditor.Edit(func);
+			tbFitness.Text = func.ToString();
 		}
 
 		private void AI_PointEvaluated(uint hits, uint total, uint point, uint size)
