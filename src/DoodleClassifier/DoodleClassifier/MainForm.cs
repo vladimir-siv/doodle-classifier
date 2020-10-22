@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
@@ -10,8 +12,14 @@ namespace DoodleClassifier
 {
 	public partial class MainForm : Form
 	{
+		#region Global
+
 		private readonly OpenFileDialog ofd = new OpenFileDialog { InitialDirectory = Extension.Desktop };
 		private readonly SaveFileDialog sfd = new SaveFileDialog { InitialDirectory = Extension.Desktop };
+
+		#endregion
+
+		#region Initialization
 
 		public MainForm()
 		{
@@ -22,6 +30,9 @@ namespace DoodleClassifier
 			InitializeTraining();
 			InitializeTesting();
 			InitializeDataset();
+
+			Application.ThreadException += Application_ThreadException;
+			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 		}
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
@@ -40,6 +51,8 @@ namespace DoodleClassifier
 			DisposeDataset();
 			GICore.Release();
 		}
+
+		#endregion
 
 		#region Dataset Display
 
@@ -515,6 +528,44 @@ namespace DoodleClassifier
 			var val = tbDatasetRatio.Value;
 			lblDatasetRatio.Text = $"Train/Test ratio: {val}%";
 			ds.TrainRatio = val / 100.0;
+		}
+
+		#endregion
+
+		#region Exception Handling
+
+		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) => HandleException(e.ExceptionObject as Exception);
+		private void Application_ThreadException(object sender, ThreadExceptionEventArgs e) => HandleException(e.Exception);
+
+		private void HandleException(Exception ex)
+		{
+			var sb = new StringBuilder();
+
+			sb.AppendLine("=======================");
+
+			if (ex != null)
+			{
+				sb.AppendLine($"Exception: {ex.Message}");
+				sb.AppendLine("-----------------------");
+				sb.AppendLine(ex.StackTrace);
+
+				if (ex.InnerException != null)
+				{
+					sb.AppendLine("-----------------------");
+					sb.AppendLine($"Inner Exception: {ex.Message}");
+					sb.AppendLine("-----------------------");
+					sb.AppendLine(ex.StackTrace);
+				}
+
+				sb.AppendLine("=======================");
+			}
+
+			if (GICore.ExceptionCount == 0u) sb.AppendLine("0 GI Exceptions.");
+			while (GICore.ExceptionCount > 0u) sb.AppendLine(GICore.NextException);
+
+			sb.AppendLine("=======================");
+
+			MessageBox.Show(sb.ToString(), ex?.GetType().FullName ?? "An exception has occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
 		}
 
 		#endregion

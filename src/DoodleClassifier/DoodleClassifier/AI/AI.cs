@@ -256,9 +256,11 @@ namespace DoodleClassifier
 
 				var reward = Math.Pow(progress.Item1, 4.0);
 				var penalty = Math.Pow(progress.Item2 / 10.0, 2.0);
-				var evalue =  Math.Min(reward - penalty, 1e-8f);
 
-				brain.EvolutionValue = (float)evalue;
+				var evalue = (float)(reward - penalty);
+				if (evalue < 1e-8f) evalue = 1e-8f;
+
+				brain.EvolutionValue = evalue;
 			}
 		}
 
