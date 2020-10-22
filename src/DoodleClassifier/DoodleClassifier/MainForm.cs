@@ -264,6 +264,8 @@ namespace DoodleClassifier
 			{
 				if
 				(
+					!Enum.TryParse<AI.Crossover>(cbCrossover.Text, out var crossover)
+					||
 					!uint.TryParse(tbPopSize.Text, out var popSize)
 					||
 					!uint.TryParse(tbParentCnt.Text, out var parentCnt)
@@ -288,7 +290,7 @@ namespace DoodleClassifier
 				lblTrainStatus.ForeColor = Color.DarkCyan;
 				lblTrainStatus.Text = "Initializing . . .";
 
-				await AI.Init(popSize, parentCnt, mutationRate, generations);
+				await AI.Init(crossover, popSize, parentCnt, mutationRate, generations);
 
 				lblTrainStatus.ForeColor = Color.DarkOrange;
 				lblTrainStatus.Text = "Preparing . . .";

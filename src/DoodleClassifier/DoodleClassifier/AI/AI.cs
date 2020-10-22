@@ -8,6 +8,13 @@ namespace DoodleClassifier
 {
 	public static class AI
 	{
+		public enum Crossover
+		{
+			RUC = 1,
+			RFC = 2,
+			SEC = 3
+		}
+
 		#region Utility
 
 		private static List<(uint[], uint, uint)> outputClassification = null;
@@ -143,7 +150,7 @@ namespace DoodleClassifier
 
 		#region Initialization
 
-		public static async Task Init(uint populationSize = 100u, uint parentCount = 1u, float mutationRate = 10.0f, uint generations = 100u)
+		public static async Task Init(Crossover crossover = Crossover.SEC, uint populationSize = 100u, uint parentCount = 2u, float mutationRate = 15.0f, uint generations = 1000u)
 		{
 			if (System != null) return;
 
@@ -173,12 +180,21 @@ namespace DoodleClassifier
 					firstGeneration.Add(brain);
 				}
 			}
+			
+			Func<uint, uint, Reproduction> rep = null;
+
+			switch (crossover)
+			{
+				case Crossover.RUC: rep = BasicBrain.RandomUniformCrossover; break;
+				case Crossover.RFC: rep = BasicBrain.RandomFullCrossover; break;
+				case Crossover.SEC: rep = BasicBrain.SequentialEvenCrossover; break;
+			}
 
 			System = new DarwinBgea
 			(
 				firstGeneration,
 				Selection.RandFit(parentCount),
-				BasicBrain.Mating(populationSize, ((BasicBrain)firstGeneration[0u]).NeuralNetwork.Params),
+				rep(populationSize, ((BasicBrain)firstGeneration[0u]).NeuralNetwork.Params),
 				generations,
 				mutationRate
 			);

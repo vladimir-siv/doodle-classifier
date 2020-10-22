@@ -66,6 +66,8 @@
 			this.lblTotal = new System.Windows.Forms.Label();
 			this.lblDatasetRatio = new System.Windows.Forms.Label();
 			this.tbDatasetRatio = new System.Windows.Forms.TrackBar();
+			this.cbCrossover = new System.Windows.Forms.ComboBox();
+			this.lblCrossover = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.pbPreview)).BeginInit();
 			this.gbDatasetDisplay.SuspendLayout();
 			this.gbTesting.SuspendLayout();
@@ -149,7 +151,7 @@
 			this.gbTesting.Controls.Add(this.lblTestStatus);
 			this.gbTesting.Controls.Add(this.btnTest);
 			this.gbTesting.Controls.Add(this.btnClassifySaved);
-			this.gbTesting.Location = new System.Drawing.Point(17, 408);
+			this.gbTesting.Location = new System.Drawing.Point(17, 435);
 			this.gbTesting.Name = "gbTesting";
 			this.gbTesting.Size = new System.Drawing.Size(252, 115);
 			this.gbTesting.TabIndex = 3;
@@ -276,6 +278,8 @@
 			// 
 			// gbTraining
 			// 
+			this.gbTraining.Controls.Add(this.lblCrossover);
+			this.gbTraining.Controls.Add(this.cbCrossover);
 			this.gbTraining.Controls.Add(this.btnSaveClassifier);
 			this.gbTraining.Controls.Add(this.lblTrainStatus);
 			this.gbTraining.Controls.Add(this.tbGenerations);
@@ -294,7 +298,7 @@
 			this.gbTraining.Controls.Add(this.lblPopSize);
 			this.gbTraining.Location = new System.Drawing.Point(17, 209);
 			this.gbTraining.Name = "gbTraining";
-			this.gbTraining.Size = new System.Drawing.Size(416, 183);
+			this.gbTraining.Size = new System.Drawing.Size(416, 212);
 			this.gbTraining.TabIndex = 2;
 			this.gbTraining.TabStop = false;
 			this.gbTraining.Text = "Training";
@@ -302,10 +306,10 @@
 			// btnSaveClassifier
 			// 
 			this.btnSaveClassifier.Enabled = false;
-			this.btnSaveClassifier.Location = new System.Drawing.Point(264, 118);
+			this.btnSaveClassifier.Location = new System.Drawing.Point(264, 148);
 			this.btnSaveClassifier.Name = "btnSaveClassifier";
 			this.btnSaveClassifier.Size = new System.Drawing.Size(104, 23);
-			this.btnSaveClassifier.TabIndex = 14;
+			this.btnSaveClassifier.TabIndex = 16;
 			this.btnSaveClassifier.Text = "Save";
 			this.btnSaveClassifier.UseVisualStyleBackColor = true;
 			this.btnSaveClassifier.Click += new System.EventHandler(this.btnSaveClassifier_Click);
@@ -315,98 +319,98 @@
 			this.lblTrainStatus.AutoSize = true;
 			this.lblTrainStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblTrainStatus.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblTrainStatus.Location = new System.Drawing.Point(17, 154);
+			this.lblTrainStatus.Location = new System.Drawing.Point(17, 182);
 			this.lblTrainStatus.Name = "lblTrainStatus";
 			this.lblTrainStatus.Size = new System.Drawing.Size(0, 13);
-			this.lblTrainStatus.TabIndex = 15;
+			this.lblTrainStatus.TabIndex = 17;
 			// 
 			// tbGenerations
 			// 
-			this.tbGenerations.Location = new System.Drawing.Point(296, 56);
+			this.tbGenerations.Location = new System.Drawing.Point(296, 30);
 			this.tbGenerations.Name = "tbGenerations";
 			this.tbGenerations.Size = new System.Drawing.Size(100, 20);
-			this.tbGenerations.TabIndex = 7;
-			this.tbGenerations.Text = "100";
+			this.tbGenerations.TabIndex = 3;
+			this.tbGenerations.Text = "1000";
 			// 
 			// lblGenerations
 			// 
 			this.lblGenerations.AutoSize = true;
-			this.lblGenerations.Location = new System.Drawing.Point(223, 59);
+			this.lblGenerations.Location = new System.Drawing.Point(223, 33);
 			this.lblGenerations.Name = "lblGenerations";
 			this.lblGenerations.Size = new System.Drawing.Size(67, 13);
-			this.lblGenerations.TabIndex = 6;
+			this.lblGenerations.TabIndex = 2;
 			this.lblGenerations.Text = "Generations:";
 			// 
 			// btnResetTrain
 			// 
 			this.btnResetTrain.Enabled = false;
-			this.btnResetTrain.Location = new System.Drawing.Point(154, 118);
+			this.btnResetTrain.Location = new System.Drawing.Point(154, 148);
 			this.btnResetTrain.Name = "btnResetTrain";
 			this.btnResetTrain.Size = new System.Drawing.Size(104, 23);
-			this.btnResetTrain.TabIndex = 13;
+			this.btnResetTrain.TabIndex = 15;
 			this.btnResetTrain.Text = "Reset";
 			this.btnResetTrain.UseVisualStyleBackColor = true;
 			this.btnResetTrain.Click += new System.EventHandler(this.btnResetTrain_Click);
 			// 
 			// btnTrain
 			// 
-			this.btnTrain.Location = new System.Drawing.Point(44, 118);
+			this.btnTrain.Location = new System.Drawing.Point(44, 148);
 			this.btnTrain.Name = "btnTrain";
 			this.btnTrain.Size = new System.Drawing.Size(104, 23);
-			this.btnTrain.TabIndex = 12;
+			this.btnTrain.TabIndex = 14;
 			this.btnTrain.Text = "Train";
 			this.btnTrain.UseVisualStyleBackColor = true;
 			this.btnTrain.Click += new System.EventHandler(this.btnTrain_Click);
 			// 
 			// tbGlobalBatch
 			// 
-			this.tbGlobalBatch.Location = new System.Drawing.Point(296, 82);
+			this.tbGlobalBatch.Location = new System.Drawing.Point(296, 114);
 			this.tbGlobalBatch.Name = "tbGlobalBatch";
 			this.tbGlobalBatch.Size = new System.Drawing.Size(100, 20);
-			this.tbGlobalBatch.TabIndex = 11;
+			this.tbGlobalBatch.TabIndex = 13;
 			this.tbGlobalBatch.Text = "4";
 			// 
 			// lblGlobalBatch
 			// 
 			this.lblGlobalBatch.AutoSize = true;
-			this.lblGlobalBatch.Location = new System.Drawing.Point(220, 85);
+			this.lblGlobalBatch.Location = new System.Drawing.Point(220, 117);
 			this.lblGlobalBatch.Name = "lblGlobalBatch";
 			this.lblGlobalBatch.Size = new System.Drawing.Size(70, 13);
-			this.lblGlobalBatch.TabIndex = 10;
+			this.lblGlobalBatch.TabIndex = 12;
 			this.lblGlobalBatch.Text = "Global batch:";
 			// 
 			// tbLocalBatch
 			// 
-			this.tbLocalBatch.Location = new System.Drawing.Point(104, 82);
+			this.tbLocalBatch.Location = new System.Drawing.Point(104, 114);
 			this.tbLocalBatch.Name = "tbLocalBatch";
 			this.tbLocalBatch.Size = new System.Drawing.Size(100, 20);
-			this.tbLocalBatch.TabIndex = 9;
+			this.tbLocalBatch.TabIndex = 11;
 			this.tbLocalBatch.Text = "4";
 			// 
 			// lblLocalBatch
 			// 
 			this.lblLocalBatch.AutoSize = true;
-			this.lblLocalBatch.Location = new System.Drawing.Point(32, 85);
+			this.lblLocalBatch.Location = new System.Drawing.Point(32, 117);
 			this.lblLocalBatch.Name = "lblLocalBatch";
 			this.lblLocalBatch.Size = new System.Drawing.Size(66, 13);
-			this.lblLocalBatch.TabIndex = 8;
+			this.lblLocalBatch.TabIndex = 10;
 			this.lblLocalBatch.Text = "Local batch:";
 			// 
 			// tbMutation
 			// 
-			this.tbMutation.Location = new System.Drawing.Point(296, 30);
+			this.tbMutation.Location = new System.Drawing.Point(296, 56);
 			this.tbMutation.Name = "tbMutation";
 			this.tbMutation.Size = new System.Drawing.Size(100, 20);
-			this.tbMutation.TabIndex = 5;
-			this.tbMutation.Text = "10.0";
+			this.tbMutation.TabIndex = 7;
+			this.tbMutation.Text = "15.0";
 			// 
 			// lblMutation
 			// 
 			this.lblMutation.AutoSize = true;
-			this.lblMutation.Location = new System.Drawing.Point(218, 33);
+			this.lblMutation.Location = new System.Drawing.Point(218, 59);
 			this.lblMutation.Name = "lblMutation";
 			this.lblMutation.Size = new System.Drawing.Size(72, 13);
-			this.lblMutation.TabIndex = 4;
+			this.lblMutation.TabIndex = 6;
 			this.lblMutation.Text = "Mutation rate:";
 			// 
 			// tbParentCnt
@@ -414,8 +418,8 @@
 			this.tbParentCnt.Location = new System.Drawing.Point(104, 56);
 			this.tbParentCnt.Name = "tbParentCnt";
 			this.tbParentCnt.Size = new System.Drawing.Size(100, 20);
-			this.tbParentCnt.TabIndex = 3;
-			this.tbParentCnt.Text = "1";
+			this.tbParentCnt.TabIndex = 5;
+			this.tbParentCnt.Text = "2";
 			// 
 			// lblParentCnt
 			// 
@@ -423,7 +427,7 @@
 			this.lblParentCnt.Location = new System.Drawing.Point(27, 59);
 			this.lblParentCnt.Name = "lblParentCnt";
 			this.lblParentCnt.Size = new System.Drawing.Size(71, 13);
-			this.lblParentCnt.TabIndex = 2;
+			this.lblParentCnt.TabIndex = 4;
 			this.lblParentCnt.Text = "Parent count:";
 			// 
 			// tbPopSize
@@ -448,7 +452,7 @@
 			this.gbDataset.Controls.Add(this.lblTotal);
 			this.gbDataset.Controls.Add(this.lblDatasetRatio);
 			this.gbDataset.Controls.Add(this.tbDatasetRatio);
-			this.gbDataset.Location = new System.Drawing.Point(290, 408);
+			this.gbDataset.Location = new System.Drawing.Point(290, 435);
 			this.gbDataset.Name = "gbDataset";
 			this.gbDataset.Size = new System.Drawing.Size(143, 115);
 			this.gbDataset.TabIndex = 4;
@@ -485,11 +489,33 @@
 			this.tbDatasetRatio.Value = 95;
 			this.tbDatasetRatio.ValueChanged += new System.EventHandler(this.tbDatasetRatio_ValueChanged);
 			// 
+			// cbCrossover
+			// 
+			this.cbCrossover.FormattingEnabled = true;
+			this.cbCrossover.Items.AddRange(new object[] {
+            "RUC",
+            "RFC",
+            "SEC"});
+			this.cbCrossover.Location = new System.Drawing.Point(104, 85);
+			this.cbCrossover.Name = "cbCrossover";
+			this.cbCrossover.Size = new System.Drawing.Size(100, 21);
+			this.cbCrossover.TabIndex = 9;
+			this.cbCrossover.Text = "SEC";
+			// 
+			// lblCrossover
+			// 
+			this.lblCrossover.AutoSize = true;
+			this.lblCrossover.Location = new System.Drawing.Point(39, 88);
+			this.lblCrossover.Name = "lblCrossover";
+			this.lblCrossover.Size = new System.Drawing.Size(57, 13);
+			this.lblCrossover.TabIndex = 8;
+			this.lblCrossover.Text = "Crossover:";
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(454, 539);
+			this.ClientSize = new System.Drawing.Size(454, 565);
 			this.Controls.Add(this.gbDataset);
 			this.Controls.Add(this.gbTraining);
 			this.Controls.Add(this.gbDrawing);
@@ -559,6 +585,8 @@
 		private System.Windows.Forms.CheckBox cbUseLoaded;
 		private System.Windows.Forms.Label lblTotal;
 		private System.Windows.Forms.NumericUpDown nudDataCount;
+		private System.Windows.Forms.Label lblCrossover;
+		private System.Windows.Forms.ComboBox cbCrossover;
 	}
 }
 
