@@ -64,6 +64,7 @@
 			this.btnSaveClassifier = new System.Windows.Forms.Button();
 			this.btnClassifierLoading = new System.Windows.Forms.Button();
 			this.cbUseLoaded = new System.Windows.Forms.CheckBox();
+			this.lblTotal = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.pbPreview)).BeginInit();
 			this.gbDatasetDisplay.SuspendLayout();
 			this.gbTesting.SuspendLayout();
@@ -390,6 +391,7 @@
 			// 
 			// gbDataset
 			// 
+			this.gbDataset.Controls.Add(this.lblTotal);
 			this.gbDataset.Controls.Add(this.lblDatasetRatio);
 			this.gbDataset.Controls.Add(this.tbDatasetRatio);
 			this.gbDataset.Location = new System.Drawing.Point(290, 408);
@@ -401,7 +403,7 @@
 			// 
 			// tbDatasetRatio
 			// 
-			this.tbDatasetRatio.Location = new System.Drawing.Point(20, 24);
+			this.tbDatasetRatio.Location = new System.Drawing.Point(20, 22);
 			this.tbDatasetRatio.Maximum = 100;
 			this.tbDatasetRatio.Minimum = 1;
 			this.tbDatasetRatio.Name = "tbDatasetRatio";
@@ -414,7 +416,7 @@
 			// lblDatasetRatio
 			// 
 			this.lblDatasetRatio.AutoSize = true;
-			this.lblDatasetRatio.Location = new System.Drawing.Point(17, 81);
+			this.lblDatasetRatio.Location = new System.Drawing.Point(17, 69);
 			this.lblDatasetRatio.Name = "lblDatasetRatio";
 			this.lblDatasetRatio.Size = new System.Drawing.Size(106, 13);
 			this.lblDatasetRatio.TabIndex = 1;
@@ -454,6 +456,15 @@
 			this.cbUseLoaded.Text = "Use loaded";
 			this.cbUseLoaded.UseVisualStyleBackColor = true;
 			// 
+			// lblTotal
+			// 
+			this.lblTotal.AutoSize = true;
+			this.lblTotal.Location = new System.Drawing.Point(17, 88);
+			this.lblTotal.Name = "lblTotal";
+			this.lblTotal.Size = new System.Drawing.Size(95, 13);
+			this.lblTotal.TabIndex = 2;
+			this.lblTotal.Text = "Dataset size: 0000";
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -468,6 +479,7 @@
 			this.MaximizeBox = false;
 			this.Name = "MainForm";
 			this.ShowIcon = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "NT-GI Doodle Classifier";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
 			((System.ComponentModel.ISupportInitialize)(this.pbPreview)).EndInit();
@@ -524,6 +536,7 @@
 		private System.Windows.Forms.Button btnSaveClassifier;
 		private System.Windows.Forms.Button btnClassifierLoading;
 		private System.Windows.Forms.CheckBox cbUseLoaded;
+		private System.Windows.Forms.Label lblTotal;
 	}
 }
 

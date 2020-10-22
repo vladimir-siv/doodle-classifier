@@ -20,12 +20,13 @@ namespace DoodleClassifier
 			InitializeDrawing();
 			InitializeTraining();
 			InitializeTesting();
+			InitializeDataset();
 		}
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			if (training)
+			if (training || evaluating)
 			{
-				MessageBox.Show("Cannot close while training is in progress. Please, stop the training first.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				MessageBox.Show("Cannot close while training or evaluation is in progress.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				e.Cancel = true;
 				return;
 			}
@@ -34,6 +35,7 @@ namespace DoodleClassifier
 			DisposeDrawing();
 			DisposeTraining();
 			DisposeTesting();
+			DisposeDataset();
 			GICore.Release();
 		}
 
@@ -319,6 +321,7 @@ namespace DoodleClassifier
 
 		private NeuralNetwork loaded = null;
 		private InputDataPoint input = null;
+		private bool evaluating = false;
 
 		private void InitializeTesting()
 		{
@@ -342,9 +345,30 @@ namespace DoodleClassifier
 			else return classifier;
 		}
 
-		private void btnTest_Click(object sender, EventArgs e)
+		private async void btnTest_Click(object sender, EventArgs e)
 		{
+			if (classifier == null && loaded == null)
+			{
+				MessageBox.Show("Please, train a classifier first, or load one.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				return;
+			}
 
+			var network = ChooseNetwork();
+			var name = network == loaded ? "LOADED" : "TRAINED";
+
+			btnTest.Enabled = false;
+			evaluating = true;
+
+			lblTestStatus.ForeColor = Color.DarkOrange;
+			lblTestStatus.Text = "Evaluating. Please wait . . .";
+
+			await new TestForm(network, name).Evaluate();
+
+			lblTestStatus.ForeColor = Color.DarkGreen;
+			lblTestStatus.Text = "Evaluation done!";
+
+			evaluating = false;
+			btnTest.Enabled = true;
 		}
 
 		private async void btnClassifySaved_Click(object sender, EventArgs e)
@@ -462,6 +486,15 @@ namespace DoodleClassifier
 		#endregion
 
 		#region Dataset
+
+		private void InitializeDataset()
+		{
+			lblTotal.Text = $"Dataset size: {Dataset.Surrogate.Size}";
+		}
+		private void DisposeDataset()
+		{
+
+		}
 
 		private void tbDatasetRatio_ValueChanged(object sender, EventArgs e)
 		{
