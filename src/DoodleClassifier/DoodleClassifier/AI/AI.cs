@@ -296,11 +296,9 @@ namespace DoodleClassifier
 
 		#region Testing
 
-		public static NeuralNetwork Best()
+		private static NeuralNetwork Best(Population population)
 		{
 			var best = (BasicBrain)null;
-
-			var population = System.Generation;
 
 			for (var i = 0u; i < population.Size; ++i)
 			{
@@ -315,10 +313,8 @@ namespace DoodleClassifier
 			return best.NeuralNetwork;
 		}
 
-		public static void Test()
-		{
-
-		}
+		public static NeuralNetwork Best() => Best(System.Generation);
+		public static NeuralNetwork PrevBest() => Best(System.Previous);
 
 		#endregion
 	}

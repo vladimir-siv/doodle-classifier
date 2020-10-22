@@ -275,7 +275,8 @@ namespace DoodleClassifier
 
 				training = false;
 
-				classifier = AI.Best();
+				if (done || AI.System.CurrentGeneration > 1u) classifier = AI.Best();
+				else classifier = AI.PrevBest();
 			}
 		}
 
