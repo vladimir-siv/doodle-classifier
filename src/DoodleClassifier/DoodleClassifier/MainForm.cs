@@ -17,6 +17,7 @@ namespace DoodleClassifier
 		{
 			GICore.Init(new Spec(DeviceType.NvidiaGpu));
 			InitializeComponent();
+			InitializeDatasetDisplay();
 			InitializeDrawing();
 			InitializeTraining();
 			InitializeTesting();
@@ -32,6 +33,7 @@ namespace DoodleClassifier
 			}
 
 			RawData.Clean();
+			DisposeDatasetDisplay();
 			DisposeDrawing();
 			DisposeTraining();
 			DisposeTesting();
@@ -41,10 +43,20 @@ namespace DoodleClassifier
 
 		#region Dataset Display
 
-		private readonly CategoryChooser categoryChooser = new CategoryChooser();
+		private CategoryChooser categoryChooser = null;
 
 		private ulong current = 0ul;
 		private RawData data = null;
+
+		private void InitializeDatasetDisplay()
+		{
+			categoryChooser = new CategoryChooser();
+		}
+		private void DisposeDatasetDisplay()
+		{
+			categoryChooser?.Dispose();
+			categoryChooser = null;
+		}
 
 		private void DrawCurrent()
 		{
