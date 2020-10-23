@@ -95,7 +95,7 @@ namespace DoodleClassifier
 				{
 					if (layer.Name != "layer") throw new FormatException("Invalid layer specification.");
 					if (!layer.HasAttribute("type")) throw new FormatException("Invalid layer type specification.");
-					var type = Type.GetType(layer.GetAttribute("type"));
+					var type = Type.GetType(string.Format(LayerPrototype.TypeFormat, layer.GetAttribute("type")));
 					if (type == null) throw new FormatException("Unknown layer type.");
 					var layerprototype = (LayerPrototype)Activator.CreateInstance(type);
 					try { layerprototype.Load(layer); }
@@ -129,7 +129,7 @@ namespace DoodleClassifier
 				for (var i = 0; i < Layers.Count; ++i)
 				{
 					var layer = (XmlElement)proto.AppendChild(doc.CreateElement("layer"));
-					layer.SetAttribute("type", Layers[i].GetType().AssemblyQualifiedName);
+					layer.SetAttribute("type", Layers[i].GetType().Name.Replace("Prototype", string.Empty));
 					Layers[i].Save(layer);
 				}
 

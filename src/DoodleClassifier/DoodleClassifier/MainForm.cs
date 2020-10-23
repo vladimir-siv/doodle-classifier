@@ -358,6 +358,7 @@ namespace DoodleClassifier
 				tooltip.SetToolTip(lblTrainIndicator, "Training");
 
 				btnSaveClassifier.Enabled = false;
+				btnBuilder.Enabled = false;
 				btnTrain.Text = "Stop";
 
 				lblTrainStatus.ForeColor = Color.DarkCyan;
@@ -385,7 +386,7 @@ namespace DoodleClassifier
 				}
 
 				btnTrain.Text = "Train";
-				btnBuilder.Enabled = btnTrain.Enabled = false;
+				btnTrain.Enabled = false;
 				btnResetTrain.Enabled = true;
 				btnSaveClassifier.Enabled = true;
 

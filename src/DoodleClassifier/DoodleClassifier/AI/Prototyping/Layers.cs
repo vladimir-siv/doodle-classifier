@@ -6,6 +6,21 @@ namespace DoodleClassifier
 {
 	public abstract class LayerPrototype
 	{
+		private static string typeFormat = null;
+		public static string TypeFormat
+		{
+			get
+			{
+				if (typeFormat == null)
+				{
+					var aqn = typeof(LayerPrototype).AssemblyQualifiedName;
+					typeFormat = aqn.Replace(nameof(LayerPrototype), "{0}Prototype");
+				}
+
+				return typeFormat;
+			}
+		}
+
 		public abstract void InsertIn(NeuralBuilder builder);
 		public abstract void Load(XmlElement layer);
 		public abstract void Save(XmlElement layer);
