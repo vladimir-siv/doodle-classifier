@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="Device" Type="System.String" Scope="User">
-      <Value Profile="(Default)">NvidiaGpu</Value>
+      <Value Profile="(Default)">Cpu</Value>
     </Setting>
     <Setting Name="Location" Type="System.String" Scope="User">
       <Value Profile="(Default)">S:\#DATASETS\GQuickDraw\</Value>
@@ -24,7 +24,7 @@
 &lt;/ArrayOfString&gt;</Value>
     </Setting>
     <Setting Name="SleepEveryGen" Type="System.UInt32" Scope="User">
-      <Value Profile="(Default)">20</Value>
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="SleepTime" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">150000</Value>

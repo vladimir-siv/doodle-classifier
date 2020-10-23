@@ -25,7 +25,7 @@ namespace DoodleClassifier.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("NvidiaGpu")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Cpu")]
         public string Device {
             get {
                 return ((string)(this["Device"]));
@@ -82,7 +82,7 @@ namespace DoodleClassifier.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public uint SleepEveryGen {
             get {
                 return ((uint)(this["SleepEveryGen"]));

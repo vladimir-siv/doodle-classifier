@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using GrandIntelligence;
 
@@ -14,15 +15,30 @@ namespace DoodleClassifier
 			lblOutput.Text = $"Output: 1x{Categories.Count}";
 		}
 
-		public NeuralBuilder Build()
-		{
-			ShowDialog();
-			return prototype;
-		}
+		#region UI
 
-		private NeuralBuilder BuildPrototype()
+		private void Add(UserControl control)
 		{
-			throw new NotImplementedException();
+			var ypos = 0;
+			
+			if (pnlLayers.Controls.Count > 0)
+			{
+				var last = pnlLayers.Controls[pnlLayers.Controls.Count - 1];
+				ypos = last.Location.Y + last.Height;
+			}
+
+			control.Location = new Point(10, ypos);
+			control.TabIndex = pnlLayers.Controls.Count;
+			pnlLayers.Controls.Add(control);
+		}
+		private void RemoveLast()
+		{
+			if (pnlLayers.Controls.Count == 0) return;
+			pnlLayers.Controls.RemoveAt(pnlLayers.Controls.Count - 1);
+		}
+		private void Clear()
+		{
+			pnlLayers.Controls.Clear();
 		}
 
 		private void lbLayers_MouseClick(object sender, MouseEventArgs e)
@@ -36,29 +52,34 @@ namespace DoodleClassifier
 
 			switch (lbLayers.SelectedItem.ToString())
 			{
-				case "Convolutional":
-					pnlLayers.Controls.Add(new ConvLayer());
-					break;
-				case "Pooling":
-					pnlLayers.Controls.Add(new PoolLayer());
-					break;
-				case "Adapting":
-					pnlLayers.Controls.Add(new AdaptLayer());
-					break;
-				case "FullyConnected":
-					pnlLayers.Controls.Add(new FCLayer());
-					break;
+				case "Convolutional": Add(new ConvLayer()); break;
+				case "Pooling": Add(new PoolLayer()); break;
+				case "Adapting": Add(new AdaptLayer()); break;
+				case "FullyConnected": Add(new FCLayer()); break;
 			}
 		}
 		private void btnRemoveLast_Click(object sender, EventArgs e)
 		{
-			if (pnlLayers.Controls.Count == 0) return;
-			pnlLayers.Controls.RemoveAt(pnlLayers.Controls.Count - 1);
+			RemoveLast();
 		}
 		private void btnClear_Click(object sender, EventArgs e)
 		{
-			pnlLayers.Controls.Clear();
+			Clear();
 		}
+
+		#endregion
+
+		public NeuralBuilder Build()
+		{
+			ShowDialog();
+			return prototype;
+		}
+
+		private NeuralBuilder BuildPrototype()
+		{
+			throw new NotImplementedException();
+		}
+
 		private void btnAccept_Click(object sender, EventArgs e)
 		{
 			NeuralBuilder builder = null;
@@ -69,12 +90,6 @@ namespace DoodleClassifier
 
 				using (var nn = builder.Compile())
 				{
-					var inShape = nn.InputShape;
-					if (inShape.Hyperdimension != 3u) throw new ApplicationException("Input shape hyperdimension not equal to 3.");
-					if (inShape[0] != RawData.ImageHeight) throw new ApplicationException($"Input shape 1st dimension not equal to {RawData.ImageHeight}.");
-					if (inShape[1] != RawData.ImageWidth) throw new ApplicationException($"Input shape 2nd dimension not equal to {RawData.ImageWidth}.");
-					if (inShape[2] != 1) throw new ApplicationException($"Input shape 3rd dimension not equal to 1.");
-
 					var outShape = nn.OutputShape;
 					if (outShape.Hyperdimension != 2u) throw new ApplicationException("Output shape hyperdimension not equal to 2.");
 					if (outShape[0] != 1) throw new ApplicationException($"Output shape 1rd dimension not equal to 1.");
