@@ -142,7 +142,14 @@ namespace DoodleClassifier
 						ActivationFunction.Softmax
 					);
 				}
+
 				return brainPrototype;
+			}
+			set
+			{
+				if (value == brainPrototype) return;
+				brainPrototype?.Dispose();
+				brainPrototype = value;
 			}
 		}
 

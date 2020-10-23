@@ -47,6 +47,8 @@
 			this.pbDraw = new System.Windows.Forms.PictureBox();
 			this.btnClear = new System.Windows.Forms.Button();
 			this.gbTraining = new System.Windows.Forms.GroupBox();
+			this.btnBuilder = new System.Windows.Forms.Button();
+			this.lblTrainIndicator = new System.Windows.Forms.Label();
 			this.tbFitness = new System.Windows.Forms.TextBox();
 			this.lblFitness = new System.Windows.Forms.Label();
 			this.lblCrossover = new System.Windows.Forms.Label();
@@ -71,7 +73,6 @@
 			this.lblTotal = new System.Windows.Forms.Label();
 			this.lblDatasetRatio = new System.Windows.Forms.Label();
 			this.tbDatasetRatio = new System.Windows.Forms.TrackBar();
-			this.lblTrainIndicator = new System.Windows.Forms.Label();
 			this.tooltip = new System.Windows.Forms.ToolTip(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.pbPreview)).BeginInit();
 			this.gbDatasetDisplay.SuspendLayout();
@@ -283,6 +284,7 @@
 			// 
 			// gbTraining
 			// 
+			this.gbTraining.Controls.Add(this.btnBuilder);
 			this.gbTraining.Controls.Add(this.lblTrainIndicator);
 			this.gbTraining.Controls.Add(this.tbFitness);
 			this.gbTraining.Controls.Add(this.lblFitness);
@@ -310,6 +312,29 @@
 			this.gbTraining.TabIndex = 2;
 			this.gbTraining.TabStop = false;
 			this.gbTraining.Text = "Training";
+			// 
+			// btnBuilder
+			// 
+			this.btnBuilder.Location = new System.Drawing.Point(310, 148);
+			this.btnBuilder.Name = "btnBuilder";
+			this.btnBuilder.Size = new System.Drawing.Size(70, 23);
+			this.btnBuilder.TabIndex = 20;
+			this.btnBuilder.Text = "Builder";
+			this.btnBuilder.UseVisualStyleBackColor = true;
+			this.btnBuilder.Click += new System.EventHandler(this.btnBuilder_Click);
+			// 
+			// lblTrainIndicator
+			// 
+			this.lblTrainIndicator.AutoSize = true;
+			this.lblTrainIndicator.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblTrainIndicator.ForeColor = System.Drawing.Color.DimGray;
+			this.lblTrainIndicator.Location = new System.Drawing.Point(9, 148);
+			this.lblTrainIndicator.Name = "lblTrainIndicator";
+			this.lblTrainIndicator.Size = new System.Drawing.Size(26, 31);
+			this.lblTrainIndicator.TabIndex = 16;
+			this.lblTrainIndicator.Text = "*";
+			this.tooltip.SetToolTip(this.lblTrainIndicator, "Idling");
+			this.lblTrainIndicator.MouseEnter += new System.EventHandler(this.lblTrainIndicator_MouseEnter);
 			// 
 			// tbFitness
 			// 
@@ -355,10 +380,10 @@
 			// btnSaveClassifier
 			// 
 			this.btnSaveClassifier.Enabled = false;
-			this.btnSaveClassifier.Location = new System.Drawing.Point(264, 148);
+			this.btnSaveClassifier.Location = new System.Drawing.Point(196, 148);
 			this.btnSaveClassifier.Name = "btnSaveClassifier";
-			this.btnSaveClassifier.Size = new System.Drawing.Size(104, 23);
-			this.btnSaveClassifier.TabIndex = 18;
+			this.btnSaveClassifier.Size = new System.Drawing.Size(70, 23);
+			this.btnSaveClassifier.TabIndex = 19;
 			this.btnSaveClassifier.Text = "Save";
 			this.btnSaveClassifier.UseVisualStyleBackColor = true;
 			this.btnSaveClassifier.Click += new System.EventHandler(this.btnSaveClassifier_Click);
@@ -371,7 +396,7 @@
 			this.lblTrainStatus.Location = new System.Drawing.Point(10, 182);
 			this.lblTrainStatus.Name = "lblTrainStatus";
 			this.lblTrainStatus.Size = new System.Drawing.Size(0, 13);
-			this.lblTrainStatus.TabIndex = 19;
+			this.lblTrainStatus.TabIndex = 21;
 			// 
 			// tbGenerations
 			// 
@@ -393,10 +418,10 @@
 			// btnResetTrain
 			// 
 			this.btnResetTrain.Enabled = false;
-			this.btnResetTrain.Location = new System.Drawing.Point(154, 148);
+			this.btnResetTrain.Location = new System.Drawing.Point(120, 148);
 			this.btnResetTrain.Name = "btnResetTrain";
-			this.btnResetTrain.Size = new System.Drawing.Size(104, 23);
-			this.btnResetTrain.TabIndex = 17;
+			this.btnResetTrain.Size = new System.Drawing.Size(70, 23);
+			this.btnResetTrain.TabIndex = 18;
 			this.btnResetTrain.Text = "Reset";
 			this.btnResetTrain.UseVisualStyleBackColor = true;
 			this.btnResetTrain.Click += new System.EventHandler(this.btnResetTrain_Click);
@@ -405,8 +430,8 @@
 			// 
 			this.btnTrain.Location = new System.Drawing.Point(44, 148);
 			this.btnTrain.Name = "btnTrain";
-			this.btnTrain.Size = new System.Drawing.Size(104, 23);
-			this.btnTrain.TabIndex = 16;
+			this.btnTrain.Size = new System.Drawing.Size(70, 23);
+			this.btnTrain.TabIndex = 17;
 			this.btnTrain.Text = "Train";
 			this.btnTrain.UseVisualStyleBackColor = true;
 			this.btnTrain.Click += new System.EventHandler(this.btnTrain_Click);
@@ -538,19 +563,6 @@
 			this.tbDatasetRatio.Value = 95;
 			this.tbDatasetRatio.ValueChanged += new System.EventHandler(this.tbDatasetRatio_ValueChanged);
 			// 
-			// lblTrainIndicator
-			// 
-			this.lblTrainIndicator.AutoSize = true;
-			this.lblTrainIndicator.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblTrainIndicator.ForeColor = System.Drawing.Color.DimGray;
-			this.lblTrainIndicator.Location = new System.Drawing.Point(9, 148);
-			this.lblTrainIndicator.Name = "lblTrainIndicator";
-			this.lblTrainIndicator.Size = new System.Drawing.Size(26, 31);
-			this.lblTrainIndicator.TabIndex = 20;
-			this.lblTrainIndicator.Text = "*";
-			this.tooltip.SetToolTip(this.lblTrainIndicator, "Idling");
-			this.lblTrainIndicator.MouseEnter += new System.EventHandler(this.lblTrainIndicator_MouseEnter);
-			// 
 			// tooltip
 			// 
 			this.tooltip.AutoPopDelay = 10000;
@@ -637,6 +649,7 @@
 		private System.Windows.Forms.Label lblFitness;
 		private System.Windows.Forms.Label lblTrainIndicator;
 		private System.Windows.Forms.ToolTip tooltip;
+		private System.Windows.Forms.Button btnBuilder;
 	}
 }
 

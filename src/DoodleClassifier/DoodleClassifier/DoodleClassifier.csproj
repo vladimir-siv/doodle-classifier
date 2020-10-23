@@ -97,6 +97,66 @@
     <Compile Include="Boxes\CategoryChooser.Designer.cs">
       <DependentUpon>CategoryChooser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Builder\Details\ActivationFuncChoice.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Builder\Details\ActivationFuncChoice.Designer.cs">
+      <DependentUpon>ActivationFuncChoice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Builder\BuilderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Builder\BuilderForm.Designer.cs">
+      <DependentUpon>BuilderForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Builder\Details\DimensionChoice.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Builder\Details\DimensionChoice.Designer.cs">
+      <DependentUpon>DimensionChoice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Builder\Details\PoolChoice.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Builder\Details\PoolChoice.Designer.cs">
+      <DependentUpon>PoolChoice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Builder\Details\ShapeChoice.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Builder\Details\ShapeChoice.Designer.cs">
+      <DependentUpon>ShapeChoice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Builder\Details\SizeChoice.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Builder\Details\SizeChoice.Designer.cs">
+      <DependentUpon>SizeChoice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Builder\Layers\AdaptLayer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Builder\Layers\AdaptLayer.Designer.cs">
+      <DependentUpon>AdaptLayer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Builder\Layers\ConvLayer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Builder\Layers\ConvLayer.Designer.cs">
+      <DependentUpon>ConvLayer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Builder\Layers\FCLayer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Builder\Layers\FCLayer.Designer.cs">
+      <DependentUpon>FCLayer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Builder\Layers\PoolLayer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Builder\Layers\PoolLayer.Designer.cs">
+      <DependentUpon>PoolLayer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dataset\Batch.cs" />
     <Compile Include="Dataset\Categories.cs" />
     <Compile Include="Dataset\DataPoint.cs" />
@@ -127,6 +187,36 @@
     </Compile>
     <EmbeddedResource Include="Boxes\CategoryChooser.resx">
       <DependentUpon>CategoryChooser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Builder\Details\ActivationFuncChoice.resx">
+      <DependentUpon>ActivationFuncChoice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Builder\BuilderForm.resx">
+      <DependentUpon>BuilderForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Builder\Details\DimensionChoice.resx">
+      <DependentUpon>DimensionChoice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Builder\Details\PoolChoice.resx">
+      <DependentUpon>PoolChoice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Builder\Details\ShapeChoice.resx">
+      <DependentUpon>ShapeChoice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Builder\Details\SizeChoice.resx">
+      <DependentUpon>SizeChoice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Builder\Layers\AdaptLayer.resx">
+      <DependentUpon>AdaptLayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Builder\Layers\ConvLayer.resx">
+      <DependentUpon>ConvLayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Builder\Layers\FCLayer.resx">
+      <DependentUpon>FCLayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Builder\Layers\PoolLayer.resx">
+      <DependentUpon>PoolLayer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FitnessEditor.resx">
       <DependentUpon>FitnessEditor.cs</DependentUpon>
@@ -182,5 +272,6 @@
     </Content>
     <None Include="Resources\favicon.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

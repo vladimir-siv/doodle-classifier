@@ -223,6 +223,8 @@ namespace DoodleClassifier
 		private FitnessFunction func = null;
 		private FitnessEditor funceditor = null;
 
+		private BuilderForm builder = null;
+
 		private DateTime? SleepStartTime = null;
 		private int SleepTime = 0;
 
@@ -237,6 +239,8 @@ namespace DoodleClassifier
 			funceditor = new FitnessEditor();
 
 			tbFitness.Text = func.ToString();
+
+			builder = new BuilderForm();
 		}
 		private void DisposeTraining()
 		{
@@ -248,12 +252,20 @@ namespace DoodleClassifier
 			funceditor?.Dispose();
 			funceditor = null;
 			func = null;
+			builder?.Dispose();
+			builder = null;
 		}
 
 		private void tbFitness_DoubleClick(object sender, EventArgs e)
 		{
 			funceditor.Edit(func);
 			tbFitness.Text = func.ToString();
+		}
+		private void btnBuilder_Click(object sender, EventArgs e)
+		{
+			var prototype = builder.Build();
+			if (prototype == null) return;
+			AI.BrainPrototype = prototype;
 		}
 		private void lblTrainIndicator_MouseEnter(object sender, EventArgs e)
 		{
@@ -373,7 +385,7 @@ namespace DoodleClassifier
 				}
 
 				btnTrain.Text = "Train";
-				btnTrain.Enabled = false;
+				btnBuilder.Enabled = btnTrain.Enabled = false;
 				btnSaveClassifier.Enabled = btnResetTrain.Enabled = true;
 
 				tooltip.SetToolTip(lblTrainIndicator, "Idling");
@@ -388,7 +400,7 @@ namespace DoodleClassifier
 		private void btnResetTrain_Click(object sender, EventArgs e)
 		{
 			btnSaveClassifier.Enabled = btnResetTrain.Enabled = false;
-			btnTrain.Enabled = true;
+			btnBuilder.Enabled = btnTrain.Enabled = true;
 
 			classifier = null;
 			AI.Dispose();
