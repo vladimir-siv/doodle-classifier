@@ -359,6 +359,7 @@ namespace DoodleClassifier
 
 				btnSaveClassifier.Enabled = false;
 				btnBuilder.Enabled = false;
+				btnTest.Enabled = btnClassifySaved.Enabled = btnClassifierLoading.Enabled = false;
 				btnTrain.Text = "Stop";
 
 				lblTrainStatus.ForeColor = Color.DarkCyan;
@@ -389,6 +390,7 @@ namespace DoodleClassifier
 				btnTrain.Enabled = false;
 				btnResetTrain.Enabled = true;
 				btnSaveClassifier.Enabled = true;
+				btnTest.Enabled = btnClassifySaved.Enabled = btnClassifierLoading.Enabled = true;
 
 				tooltip.SetToolTip(lblTrainIndicator, "Idling");
 				lblTrainIndicator.ForeColor = Color.DimGray;
@@ -545,11 +547,11 @@ namespace DoodleClassifier
 					return;
 				}
 
-				DialogResult choice;
+				DialogResult choice = DialogResult.No;
 				
 				if (loaded != null)
 				{
-					choice = MessageBox.Show("Loading successful. Would you also like to load the neural prototype as well?", "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+					if (!training) choice = MessageBox.Show("Loading successful. Would you also like to load the neural prototype as well?", "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
 					btnClassifierLoading.Text = "Unload";
 					btnClassifierLoading.Enabled = true;
@@ -557,7 +559,7 @@ namespace DoodleClassifier
 				}
 				else
 				{
-					choice = MessageBox.Show($"Neural network not found in the file, but the prototype has been found.{Environment.NewLine}Would you like to load the neural prototype?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+					if (!training) choice = MessageBox.Show($"Neural network not found in the file, but the prototype has been found.{Environment.NewLine}Would you like to load the neural prototype?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
 					btnClassifierLoading.Enabled = true;
 				}
