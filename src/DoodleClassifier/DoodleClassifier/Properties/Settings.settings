@@ -23,5 +23,11 @@
   &lt;string&gt;dragon&lt;/string&gt;
 &lt;/ArrayOfString&gt;</Value>
     </Setting>
+    <Setting Name="SleepEveryGen" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">20</Value>
+    </Setting>
+    <Setting Name="SleepTime" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">150000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

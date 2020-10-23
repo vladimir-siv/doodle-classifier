@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.btnTest = new System.Windows.Forms.Button();
 			this.pbPreview = new System.Windows.Forms.PictureBox();
 			this.btnNext = new System.Windows.Forms.Button();
@@ -70,6 +71,8 @@
 			this.lblTotal = new System.Windows.Forms.Label();
 			this.lblDatasetRatio = new System.Windows.Forms.Label();
 			this.tbDatasetRatio = new System.Windows.Forms.TrackBar();
+			this.lblTrainIndicator = new System.Windows.Forms.Label();
+			this.tooltip = new System.Windows.Forms.ToolTip(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.pbPreview)).BeginInit();
 			this.gbDatasetDisplay.SuspendLayout();
 			this.gbTesting.SuspendLayout();
@@ -280,6 +283,7 @@
 			// 
 			// gbTraining
 			// 
+			this.gbTraining.Controls.Add(this.lblTrainIndicator);
 			this.gbTraining.Controls.Add(this.tbFitness);
 			this.gbTraining.Controls.Add(this.lblFitness);
 			this.gbTraining.Controls.Add(this.lblCrossover);
@@ -364,7 +368,7 @@
 			this.lblTrainStatus.AutoSize = true;
 			this.lblTrainStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblTrainStatus.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblTrainStatus.Location = new System.Drawing.Point(17, 182);
+			this.lblTrainStatus.Location = new System.Drawing.Point(10, 182);
 			this.lblTrainStatus.Name = "lblTrainStatus";
 			this.lblTrainStatus.Size = new System.Drawing.Size(0, 13);
 			this.lblTrainStatus.TabIndex = 19;
@@ -534,6 +538,25 @@
 			this.tbDatasetRatio.Value = 95;
 			this.tbDatasetRatio.ValueChanged += new System.EventHandler(this.tbDatasetRatio_ValueChanged);
 			// 
+			// lblTrainIndicator
+			// 
+			this.lblTrainIndicator.AutoSize = true;
+			this.lblTrainIndicator.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblTrainIndicator.ForeColor = System.Drawing.Color.DimGray;
+			this.lblTrainIndicator.Location = new System.Drawing.Point(9, 148);
+			this.lblTrainIndicator.Name = "lblTrainIndicator";
+			this.lblTrainIndicator.Size = new System.Drawing.Size(26, 31);
+			this.lblTrainIndicator.TabIndex = 20;
+			this.lblTrainIndicator.Text = "*";
+			this.tooltip.SetToolTip(this.lblTrainIndicator, "Idling");
+			this.lblTrainIndicator.MouseEnter += new System.EventHandler(this.lblTrainIndicator_MouseEnter);
+			// 
+			// tooltip
+			// 
+			this.tooltip.AutoPopDelay = 10000;
+			this.tooltip.InitialDelay = 500;
+			this.tooltip.ReshowDelay = 100;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -612,6 +635,8 @@
 		private System.Windows.Forms.ComboBox cbCrossover;
 		private System.Windows.Forms.TextBox tbFitness;
 		private System.Windows.Forms.Label lblFitness;
+		private System.Windows.Forms.Label lblTrainIndicator;
+		private System.Windows.Forms.ToolTip tooltip;
 	}
 }
 

@@ -79,5 +79,29 @@ namespace DoodleClassifier.Properties {
                 this["Categories"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public uint SleepEveryGen {
+            get {
+                return ((uint)(this["SleepEveryGen"]));
+            }
+            set {
+                this["SleepEveryGen"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("150000")]
+        public int SleepTime {
+            get {
+                return ((int)(this["SleepTime"]));
+            }
+            set {
+                this["SleepTime"] = value;
+            }
+        }
     }
 }

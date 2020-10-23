@@ -223,10 +223,15 @@ namespace DoodleClassifier
 		private FitnessFunction func = null;
 		private FitnessEditor funceditor = null;
 
+		private DateTime? SleepStartTime = null;
+		private int SleepTime = 0;
+
 		private void InitializeTraining()
 		{
 			AI.PointEvaluated += AI_PointEvaluated;
 			AI.PopulationEvaluated += AI_PopulationEvaluated;
+			AI.SleepStarting += AI_SleepStarting;
+			AI.SleepEnded += AI_SleepEnded;
 
 			func = new FitnessFunction();
 			funceditor = new FitnessEditor();
@@ -237,6 +242,8 @@ namespace DoodleClassifier
 		{
 			AI.PointEvaluated -= AI_PointEvaluated;
 			AI.PopulationEvaluated -= AI_PopulationEvaluated;
+			AI.SleepStarting -= AI_SleepStarting;
+			AI.SleepEnded -= AI_SleepEnded;
 
 			funceditor?.Dispose();
 			funceditor = null;
@@ -247,6 +254,13 @@ namespace DoodleClassifier
 		{
 			funceditor.Edit(func);
 			tbFitness.Text = func.ToString();
+		}
+		private void lblTrainIndicator_MouseEnter(object sender, EventArgs e)
+		{
+			if (SleepStartTime == null) return;
+			var passed = DateTime.Now - (DateTime)SleepStartTime;
+			var remaining = SleepTime - passed.TotalMilliseconds;
+			tooltip.SetToolTip(lblTrainIndicator, $"Sleeping [Remaining: {remaining:#.00} ms]");
 		}
 
 		private void AI_PointEvaluated(uint hits, uint total, uint point, uint size)
@@ -270,6 +284,36 @@ namespace DoodleClassifier
 
 			lblTrainStatus.ForeColor = Color.DarkCyan;
 			lblTrainStatus.Text = $"Gen [{AI.System.CurrentGeneration}/{AI.System.Generations}] -> Hits: [{hits}/{total}] Misses: [{total - hits}/{total}]";
+		}
+		private void AI_SleepStarting(int time)
+		{
+			if (SleepStartTime == null)
+			{
+				SleepStartTime = DateTime.Now;
+				SleepTime = time;
+			}
+
+			if (InvokeRequired)
+			{
+				Invoke(new Action<int>(AI_SleepStarting), time);
+				return;
+			}
+
+			lblTrainIndicator.ForeColor = Color.DeepSkyBlue;
+		}
+		private void AI_SleepEnded(int time)
+		{
+			SleepStartTime = null;
+			SleepTime = 0;
+
+			if (InvokeRequired)
+			{
+				Invoke(new Action<int>(AI_SleepEnded), time);
+				return;
+			}
+
+			tooltip.SetToolTip(lblTrainIndicator, "Training");
+			lblTrainIndicator.ForeColor = Color.DarkGreen;
 		}
 
 		private async void btnTrain_Click(object sender, EventArgs e)
@@ -302,6 +346,8 @@ namespace DoodleClassifier
 				}
 
 				training = true;
+				lblTrainIndicator.ForeColor = Color.DarkGreen;
+				tooltip.SetToolTip(lblTrainIndicator, "Training");
 
 				btnTrain.Text = "Stop";
 
@@ -330,6 +376,8 @@ namespace DoodleClassifier
 				btnTrain.Enabled = false;
 				btnSaveClassifier.Enabled = btnResetTrain.Enabled = true;
 
+				tooltip.SetToolTip(lblTrainIndicator, "Idling");
+				lblTrainIndicator.ForeColor = Color.DimGray;
 				training = false;
 
 				if (done || AI.System.CurrentGeneration > 1u) classifier = AI.Best();

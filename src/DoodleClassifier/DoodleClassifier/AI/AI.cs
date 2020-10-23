@@ -15,6 +15,14 @@ namespace DoodleClassifier
 			SEC = 3
 		}
 
+		#region Settings
+
+		private static readonly uint SleepGenStride = Properties.Settings.Default.SleepEveryGen;
+		private static readonly int SleepTime = Properties.Settings.Default.SleepTime;
+		private static bool ShouldSleep => SleepGenStride != 0u && System.CurrentGeneration % SleepGenStride == 0u;
+
+		#endregion
+
 		#region Utility
 
 		private static List<(uint[], uint, uint)> outputClassification = null;
@@ -145,6 +153,8 @@ namespace DoodleClassifier
 		public static event Action EvaluationPrepare;
 		public static event Action<uint, uint, uint, uint> PointEvaluated;
 		public static event Action<uint, uint> PopulationEvaluated;
+		public static event Action<int> SleepStarting;
+		public static event Action<int> SleepEnded;
 
 		#endregion
 
@@ -308,6 +318,15 @@ namespace DoodleClassifier
 					var population = System.Generation;
 					await ds.RandomFillBatch(Batch, localCount, globalCount);
 					await EvaluatePopulation(population, func, Batch);
+					if (stopTrain) break;
+					
+					if (ShouldSleep)
+					{
+						SleepStarting?.Invoke(SleepTime);
+						await Task.Delay(SleepTime);
+						SleepEnded?.Invoke(SleepTime);
+					}
+
 					if (stopTrain) break;
 				}
 				while (System.Cycle());
