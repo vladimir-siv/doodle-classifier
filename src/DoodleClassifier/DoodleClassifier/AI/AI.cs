@@ -49,100 +49,145 @@ namespace DoodleClassifier
 
 		#region Global
 
-		private static NeuralBuilder brainPrototype = null;
-		public static NeuralBuilder BrainPrototype
+		private static NeuralPrototype brainPrototype = null;
+		public static NeuralPrototype BrainPrototype
 		{
 			get
 			{
 				if (brainPrototype == null)
 				{
-					brainPrototype = new NeuralBuilder(Shape.As3D(RawData.ImageHeight, RawData.ImageWidth, 1u), bindInput: false);
+					// Default prototype
 
-					brainPrototype.ConvLayer
-					(
-						32u,
-						new Layer.Convolutional.Filter(7u, 7u),
-						new Layer.Convolutional.Stride(1u, 1u),
-						new Layer.Convolutional.Padding(3u, 3u),
-						ActivationFunction.ELU
-					);
-					brainPrototype.ConvLayer
-					(
-						32u,
-						new Layer.Convolutional.Filter(7u, 7u),
-						new Layer.Convolutional.Stride(1u, 1u),
-						new Layer.Convolutional.Padding(3u, 3u),
-						ActivationFunction.ELU
-					);
-					brainPrototype.PoolLayer
-					(
-						new Layer.Pooling.Filter(2u, 2u),
-						new Layer.Pooling.Stride(2u, 2u),
-						PoolingType.Max
-					);
-					brainPrototype.AdaptLayer
-					(
+					brainPrototype = new NeuralPrototype();
 
-					);
-					brainPrototype.ConvLayer
+					brainPrototype.Add
 					(
-						16u,
-						new Layer.Convolutional.Filter(5u, 5u),
-						new Layer.Convolutional.Stride(1u, 1u),
-						new Layer.Convolutional.Padding(2u, 2u),
-						ActivationFunction.ELU
+						new ConvPrototype
+						{
+							Size = 32u,
+							Filter = new Layer.Convolutional.Filter(7u, 7u),
+							Stride = new Layer.Convolutional.Stride(1u, 1u),
+							Padding = new Layer.Convolutional.Padding(3u, 3u),
+							Activation = ActivationFunction.ELU
+						}
 					);
-					brainPrototype.ConvLayer
+					brainPrototype.Add
 					(
-						16u,
-						new Layer.Convolutional.Filter(5u, 5u),
-						new Layer.Convolutional.Stride(1u, 1u),
-						new Layer.Convolutional.Padding(2u, 2u),
-						ActivationFunction.ELU
+						new ConvPrototype
+						{
+							Size = 32u,
+							Filter = new Layer.Convolutional.Filter(7u, 7u),
+							Stride = new Layer.Convolutional.Stride(1u, 1u),
+							Padding = new Layer.Convolutional.Padding(3u, 3u),
+							Activation = ActivationFunction.ELU
+						}
 					);
-					brainPrototype.PoolLayer
+					brainPrototype.Add
 					(
-						new Layer.Pooling.Filter(2u, 2u),
-						new Layer.Pooling.Stride(2u, 2u),
-						PoolingType.Max
+						new PoolPrototype
+						{
+							Filter = new Layer.Pooling.Filter(2u, 2u),
+							Stride = new Layer.Pooling.Stride(2u, 2u),
+							Type = PoolingType.Max
+						}
 					);
-					brainPrototype.AdaptLayer
+					brainPrototype.Add
 					(
-
+						new AdaptPrototype
+						{
+							Normalize = true,
+							Reshape = false
+						}
 					);
-					brainPrototype.ConvLayer
+					brainPrototype.Add
 					(
-						8u,
-						new Layer.Convolutional.Filter(3u, 3u),
-						new Layer.Convolutional.Stride(1u, 1u),
-						new Layer.Convolutional.Padding(1u, 1u),
-						ActivationFunction.ELU
+						new ConvPrototype
+						{
+							Size = 16u,
+							Filter = new Layer.Convolutional.Filter(5u, 5u),
+							Stride = new Layer.Convolutional.Stride(1u, 1u),
+							Padding = new Layer.Convolutional.Padding(2u, 2u),
+							Activation = ActivationFunction.ELU
+						}
 					);
-					brainPrototype.ConvLayer
+					brainPrototype.Add
 					(
-						8u,
-						new Layer.Convolutional.Filter(3u, 3u),
-						new Layer.Convolutional.Stride(2u, 2u),
-						new Layer.Convolutional.Padding(1u, 1u),
-						ActivationFunction.ELU
+						new ConvPrototype
+						{
+							Size = 16u,
+							Filter = new Layer.Convolutional.Filter(5u, 5u),
+							Stride = new Layer.Convolutional.Stride(1u, 1u),
+							Padding = new Layer.Convolutional.Padding(2u, 2u),
+							Activation = ActivationFunction.ELU
+						}
 					);
-					brainPrototype.AdaptLayer
+					brainPrototype.Add
 					(
-						Shape.As2D(1u, 4u*4u*8u),
-						true
+						new PoolPrototype
+						{
+							Filter = new Layer.Pooling.Filter(2u, 2u),
+							Stride = new Layer.Pooling.Stride(2u, 2u),
+							Type = PoolingType.Max
+						}
 					);
-					brainPrototype.FCLayer
+					brainPrototype.Add
 					(
-						32u,
-						ActivationFunction.ELU
+						new AdaptPrototype
+						{
+							Normalize = true,
+							Activation = ActivationFunction.LTU,
+							Reshape = false
+						}
 					);
-					brainPrototype.FCLayer
+					brainPrototype.Add
 					(
-						Categories.Count,
-						ActivationFunction.Softmax
+						new ConvPrototype
+						{
+							Size = 8u,
+							Filter = new Layer.Convolutional.Filter(3u, 3u),
+							Stride = new Layer.Convolutional.Stride(1u, 1u),
+							Padding = new Layer.Convolutional.Padding(1u, 1u),
+							Activation = ActivationFunction.ELU
+						}
+					);
+					brainPrototype.Add
+					(
+						new ConvPrototype
+						{
+							Size = 8u,
+							Filter = new Layer.Convolutional.Filter(3u, 3u),
+							Stride = new Layer.Convolutional.Stride(2u, 2u),
+							Padding = new Layer.Convolutional.Padding(1u, 1u),
+							Activation = ActivationFunction.ELU
+						}
+					);
+					brainPrototype.Add
+					(
+						new AdaptPrototype
+						{
+							Normalize = true,
+							Activation = ActivationFunction.LTU,
+							Reshape = true,
+							Shape = Shape.As2D(1u, 4u*4u*8u),
+						}
+					);
+					brainPrototype.Add
+					(
+						new FCPrototype
+						{
+							Size = 32u,
+							Activation = ActivationFunction.ELU
+						}
+					);
+					brainPrototype.Add
+					(
+						new FCPrototype
+						{
+							Size = Categories.Count,
+							Activation = ActivationFunction.Softmax
+						}
 					);
 				}
-
 				return brainPrototype;
 			}
 			set
@@ -186,7 +231,7 @@ namespace DoodleClassifier
 
 				for (var i = 0u; i < populationSize; ++i)
 				{
-					var brain = new BasicBrain(BrainPrototype);
+					var brain = new BasicBrain(BrainPrototype.Builder);
 
 					for (var param = it.Begin(brain.NeuralNetwork); param != null; param = it.Next())
 					{

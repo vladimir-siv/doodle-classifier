@@ -263,9 +263,7 @@ namespace DoodleClassifier
 		}
 		private void btnBuilder_Click(object sender, EventArgs e)
 		{
-			var prototype = builder.Build();
-			if (prototype == null) return;
-			AI.BrainPrototype = prototype;
+			AI.BrainPrototype = builder.Build(AI.BrainPrototype);
 		}
 		private void lblTrainIndicator_MouseEnter(object sender, EventArgs e)
 		{
@@ -567,7 +565,8 @@ namespace DoodleClassifier
 							}
 						}
 
-						loaded = AI.BrainPrototype.Compile();
+						// ToDo: This will not work in most cases
+						loaded = AI.BrainPrototype.Builder.Compile();
 
 						using (var it = new NeuralIterator())
 						{

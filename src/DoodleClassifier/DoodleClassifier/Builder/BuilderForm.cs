@@ -7,7 +7,7 @@ namespace DoodleClassifier
 {
 	public partial class BuilderForm : Form
 	{
-		private NeuralBuilder prototype = null;
+		private NeuralPrototype prototype = null;
 
 		public BuilderForm()
 		{
@@ -69,97 +69,134 @@ namespace DoodleClassifier
 
 		#endregion
 
-		public NeuralBuilder Build()
+		public NeuralPrototype Build(NeuralPrototype current)
 		{
+			prototype = current;
+			DisplayPrototype(current);
 			ShowDialog();
 			return prototype;
 		}
 
-		private NeuralBuilder BuildPrototype()
+		private NeuralPrototype BuildPrototype()
 		{
-			NeuralBuilder builder = null;
+			var proto = new NeuralPrototype();
 
-			try
+			for (var i = 0; i < pnlLayers.Controls.Count; ++i)
 			{
-				builder = new NeuralBuilder(Shape.As3D(RawData.ImageHeight, RawData.ImageWidth, 1u), bindInput: false);
+				var control = pnlLayers.Controls[i];
+				if (!(control is UserControl)) continue;
 
-				for (var i = 0; i < pnlLayers.Controls.Count; ++i)
+				else if (control is ConvLayer conv)
 				{
-					var control = pnlLayers.Controls[i];
-
-					if (!(control is UserControl)) continue;
-
-					else if (control is ConvLayer conv)
-					{
-						builder.ConvLayer
-						(
-							conv.LayerSize,
-							conv.LayerFilter,
-							conv.LayerStride,
-							conv.LayerPadding,
-							conv.LayerActivation
-						);
-					}
-
-					else if (control is PoolLayer pool)
-					{
-						builder.PoolLayer
-						(
-							pool.LayerFilter,
-							pool.LayerStride,
-							pool.LayerPoolingType
-						);
-					}
-
-					else if (control is AdaptLayer adapt)
-					{
-						if (adapt.LayerReshape)
+					proto.Add
+					(
+						new ConvPrototype
 						{
-							builder.AdaptLayer
-							(
-								adapt.LayerShape,
-								adapt.LayerNormalize,
-								adapt.LayerActivation
-							);
+							Size = conv.LayerSize,
+							Filter = conv.LayerFilter,
+							Stride = conv.LayerStride,
+							Padding = conv.LayerPadding,
+							Activation = conv.LayerActivation
 						}
-						else
-						{
-							builder.AdaptLayer
-							(
-								adapt.LayerNormalize,
-								adapt.LayerActivation
-							);
-						}
-					}
-
-					else if (control is FCLayer fc)
-					{
-						builder.FCLayer
-						(
-							fc.LayerSize,
-							fc.LayerActivation
-						);
-					}
+					);
 				}
-
-				return builder;
+				else if (control is PoolLayer pool)
+				{
+					proto.Add
+					(
+						new PoolPrototype
+						{
+							Filter = pool.LayerFilter,
+							Stride = pool.LayerStride,
+							Type = pool.LayerPoolingType
+						}
+					);
+				}
+				else if (control is AdaptLayer adapt)
+				{
+					proto.Add
+					(
+						new AdaptPrototype
+						{
+							Normalize = adapt.LayerNormalize,
+							Activation = adapt.LayerActivation,
+							Reshape = adapt.LayerReshape,
+							Shape = adapt.LayerReshape ? adapt.LayerShape : Shape.Scalar()
+						}
+					);
+				}
+				else if (control is FCLayer fc)
+				{
+					proto.Add
+					(
+						new FCPrototype
+						{
+							Size = fc.LayerSize,
+							Activation = fc.LayerActivation
+						}
+					);
+				}
 			}
-			catch
+
+			return proto;
+		}
+		private void DisplayPrototype(NeuralPrototype proto)
+		{
+			if (proto == null) throw new ArgumentNullException(nameof(proto));
+
+			Clear();
+
+			for (var i = 0; i < proto.LayerCount; ++i)
 			{
-				builder?.Dispose();
-				throw;
+				var layer = proto[i];
+				if (!(layer is LayerPrototype)) continue;
+
+				else if (layer is ConvPrototype conv)
+				{
+					var control = new ConvLayer();
+					control.LayerSize = conv.Size;
+					control.LayerFilter = conv.Filter;
+					control.LayerStride = conv.Stride;
+					control.LayerPadding = conv.Padding;
+					control.LayerActivation = conv.Activation;
+					Add(control);
+				}
+				else if (layer is PoolPrototype pool)
+				{
+					var control = new PoolLayer();
+					control.LayerFilter = pool.Filter;
+					control.LayerStride = pool.Stride;
+					control.LayerPoolingType = pool.Type;
+					Add(control);
+				}
+				else if (layer is AdaptPrototype adapt)
+				{
+					var control = new AdaptLayer();
+					control.LayerNormalize = adapt.Normalize;
+					control.LayerActivation = adapt.Activation;
+					control.LayerReshape = adapt.Reshape;
+					if (adapt.Reshape) control.LayerShape = adapt.Shape;
+					Add(control);
+				}
+				else if (layer is FCPrototype fc)
+				{
+					var control = new FCLayer();
+					control.LayerSize = fc.Size;
+					control.LayerActivation = fc.Activation;
+					Add(control);
+				}
 			}
 		}
 
 		private void btnAccept_Click(object sender, EventArgs e)
 		{
-			NeuralBuilder builder = null;
+			NeuralPrototype proto = null;
 
 			try
 			{
-				builder = BuildPrototype();
+				proto = BuildPrototype();
 
-				using (var nn = builder.Compile())
+				using (var nn = proto.Builder.Compile())
 				{
 					var outShape = nn.OutputShape;
 					if (outShape.Hyperdimension != 2u) throw new ApplicationException("Output shape hyperdimension not equal to 2.");
@@ -167,13 +204,13 @@ namespace DoodleClassifier
 					if (outShape[1] != Categories.Count) throw new ApplicationException($"Output shape 2nd dimension not equal to {Categories.Count}.");
 				}
 
-				prototype = builder;
+				prototype = proto;
 				MessageBox.Show("Prototype created.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				DialogResult = DialogResult.OK;
 			}
 			catch (Exception ex)
 			{
-				builder?.Dispose();
+				proto?.Dispose();
 				var message = string.Empty;
 				if (ex is ApplicationException) message = ex.Message;
 				else message = "Prototype network cannot be compiled.";

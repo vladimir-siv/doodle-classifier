@@ -91,6 +91,8 @@
   <ItemGroup>
     <Compile Include="AI\AI.cs" />
     <Compile Include="AI\FitnessFunction.cs" />
+    <Compile Include="AI\Prototyping\Layers.cs" />
+    <Compile Include="AI\Prototyping\NeuralPrototype.cs" />
     <Compile Include="Boxes\CategoryChooser.cs">
       <SubType>Form</SubType>
     </Compile>
