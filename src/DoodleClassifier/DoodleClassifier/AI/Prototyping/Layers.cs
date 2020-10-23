@@ -1,10 +1,14 @@
-﻿using GrandIntelligence;
+﻿using System;
+using System.Xml;
+using GrandIntelligence;
 
 namespace DoodleClassifier
 {
 	public abstract class LayerPrototype
 	{
 		public abstract void InsertIn(NeuralBuilder builder);
+		public abstract void Load(XmlElement layer);
+		public abstract void Save(XmlElement layer);
 	}
 
 	public sealed class ConvPrototype : LayerPrototype
@@ -26,6 +30,23 @@ namespace DoodleClassifier
 				Activation
 			);
 		}
+
+		public override void Load(XmlElement layer)
+		{
+			Size = Convert.ToUInt32(layer.GetAttribute("size"));
+			Filter = layer.GetAttribute("filter").DeserializeAsConvFilter();
+			Stride = layer.GetAttribute("stride").DeserializeAsConvStride();
+			Padding = layer.GetAttribute("padding").DeserializeAsConvPadding();
+			Activation = (ActivationFunction)Enum.Parse(typeof(ActivationFunction), layer.GetAttribute("activation"));
+		}
+		public override void Save(XmlElement layer)
+		{
+			layer.SetAttribute("size", Size.ToString());
+			layer.SetAttribute("filter", Filter.Serialize());
+			layer.SetAttribute("stride", Stride.Serialize());
+			layer.SetAttribute("padding", Padding.Serialize());
+			layer.SetAttribute("activation", Activation.ToString());
+		}
 	}
 	public sealed class PoolPrototype : LayerPrototype
 	{
@@ -41,6 +62,19 @@ namespace DoodleClassifier
 				Stride,
 				Type
 			);
+		}
+
+		public override void Load(XmlElement layer)
+		{
+			Filter = layer.GetAttribute("filter").DeserializeAsPoolFilter();
+			Stride = layer.GetAttribute("stride").DeserializeAsPoolStride();
+			Type = (PoolingType)Enum.Parse(typeof(PoolingType), layer.GetAttribute("pooling-type"));
+		}
+		public override void Save(XmlElement layer)
+		{
+			layer.SetAttribute("filter", Filter.Serialize());
+			layer.SetAttribute("stride", Stride.Serialize());
+			layer.SetAttribute("pooling-type", Type.ToString());
 		}
 	}
 	public sealed class AdaptPrototype : LayerPrototype
@@ -70,6 +104,21 @@ namespace DoodleClassifier
 				);
 			}
 		}
+
+		public override void Load(XmlElement layer)
+		{
+			Normalize = Convert.ToBoolean(layer.GetAttribute("normalize"));
+			Activation = (ActivationFunction)Enum.Parse(typeof(ActivationFunction), layer.GetAttribute("activation"));
+			Reshape = Convert.ToBoolean(layer.GetAttribute("reshape"));
+			if (Reshape) Shape = layer.GetAttribute("shape").DeserializeAsShape();
+		}
+		public override void Save(XmlElement layer)
+		{
+			layer.SetAttribute("normalize", Normalize.ToString().ToLowerInvariant());
+			layer.SetAttribute("activation", Activation.ToString());
+			layer.SetAttribute("reshape", Reshape.ToString().ToLowerInvariant());
+			if (Reshape) layer.SetAttribute("shape", Shape.Serialize());
+		}
 	}
 	public sealed class FCPrototype : LayerPrototype
 	{
@@ -83,6 +132,17 @@ namespace DoodleClassifier
 				Size,
 				Activation
 			);
+		}
+
+		public override void Load(XmlElement layer)
+		{
+			Size = Convert.ToUInt32(layer.GetAttribute("size"));
+			Activation = (ActivationFunction)Enum.Parse(typeof(ActivationFunction), layer.GetAttribute("activation"));
+		}
+		public override void Save(XmlElement layer)
+		{
+			layer.SetAttribute("size", Size.ToString());
+			layer.SetAttribute("activation", Activation.ToString());
 		}
 	}
 }

@@ -3,9 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
 using GrandIntelligence;
 
 namespace DoodleClassifier
@@ -359,10 +357,14 @@ namespace DoodleClassifier
 				lblTrainIndicator.ForeColor = Color.DarkGreen;
 				tooltip.SetToolTip(lblTrainIndicator, "Training");
 
+				btnSaveClassifier.Enabled = false;
 				btnTrain.Text = "Stop";
 
 				lblTrainStatus.ForeColor = Color.DarkCyan;
 				lblTrainStatus.Text = "Initializing . . .";
+
+				var ds = Dataset.Surrogate;
+				ds.TrainRatio = tbDatasetRatio.Value / 100.0;
 
 				await AI.Init(crossover, popSize, parentCnt, mutationRate, generations);
 
@@ -384,7 +386,8 @@ namespace DoodleClassifier
 
 				btnTrain.Text = "Train";
 				btnBuilder.Enabled = btnTrain.Enabled = false;
-				btnSaveClassifier.Enabled = btnResetTrain.Enabled = true;
+				btnResetTrain.Enabled = true;
+				btnSaveClassifier.Enabled = true;
 
 				tooltip.SetToolTip(lblTrainIndicator, "Idling");
 				lblTrainIndicator.ForeColor = Color.DimGray;
@@ -397,7 +400,7 @@ namespace DoodleClassifier
 
 		private void btnResetTrain_Click(object sender, EventArgs e)
 		{
-			btnSaveClassifier.Enabled = btnResetTrain.Enabled = false;
+			btnResetTrain.Enabled = false;
 			btnBuilder.Enabled = btnTrain.Enabled = true;
 
 			classifier = null;
@@ -410,34 +413,15 @@ namespace DoodleClassifier
 		private async void btnSaveClassifier_Click(object sender, EventArgs e)
 		{
 			sfd.Title = "Save network";
-			sfd.Filter = "Convolutional Network | *.cnn";
-			sfd.DefaultExt = ".cnn";
+			sfd.Filter = "Artificial Neural Network | *.ann";
+			sfd.DefaultExt = ".ann";
 
 			if (sfd.ShowDialog() != DialogResult.OK) return;
 
 			lblTrainStatus.ForeColor = Color.DarkOrange;
 			lblTrainStatus.Text = "Saving . . .";
 
-			await Task.Run(() =>
-			{
-				using (var stream = new StreamWriter(sfd.FileName))
-				using (var it = new NeuralIterator())
-				{
-					for (var param = it.Begin(classifier); param != null; param = it.Next())
-					{
-						stream.Write($"{it.CurrentParam}:");
-
-						var data = param.GetData();
-
-						for (var i = 0u; i < data.Length; ++i)
-						{
-							stream.Write($" {data[i]}");
-						}
-
-						stream.WriteLine();
-					}
-				}
-			});
+			await AI.BrainPrototype.Save(sfd.FileName, classifier);
 
 			lblTrainStatus.ForeColor = Color.DarkGreen;
 			lblTrainStatus.Text = "Saved!";
@@ -529,8 +513,8 @@ namespace DoodleClassifier
 			if (loaded == null)
 			{
 				ofd.Title = "Open network";
-				ofd.Filter = "Convolutional Network | *.cnn";
-				ofd.DefaultExt = ".cnn";
+				ofd.Filter = "Artificial Neural Network | *.ann";
+				ofd.DefaultExt = ".ann";
 
 				if (ofd.ShowDialog() != DialogResult.OK) return;
 
@@ -539,68 +523,52 @@ namespace DoodleClassifier
 
 				btnClassifierLoading.Enabled = false;
 
-				loaded = await Task.Run(() =>
+				var prototype = new NeuralPrototype();
+
+				try
 				{
-					try
-					{
-						var lines = File.ReadAllLines(ofd.FileName);
-
-						var vals = new float[lines.Length][];
-
-						for (var ln = 0; ln < lines.Length; ++ln)
-						{
-							var line = lines[ln];
-
-							var s1 = line.Split(':');
-
-							var i = Convert.ToUInt32(s1[0]);
-
-							var svals = s1[1].Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-							vals[i] = new float[svals.Length];
-
-							for (var v = 0u; v < svals.Length; ++v)
-							{
-								vals[i][v] = Convert.ToSingle(svals[v]);
-							}
-						}
-
-						// ToDo: This will not work in most cases
-						loaded = AI.BrainPrototype.Builder.Compile();
-
-						using (var it = new NeuralIterator())
-						{
-							for (var param = it.Begin(loaded); param != null; param = it.Next())
-							{
-								param.Transfer(vals[it.CurrentParam]);
-							}
-						}
-					}
-					catch
-					{
-						loaded?.Dispose();
-						loaded = null;
-					}
-
-					return loaded;
-				});
-
-				if (loaded != null)
-				{
-					btnClassifierLoading.Text = "Unload";
-					btnClassifierLoading.Enabled = true;
-					cbUseLoaded.Enabled = true;
-
-					lblTestStatus.ForeColor = Color.DarkGreen;
-					lblTestStatus.Text = "Done!";
+					loaded = await prototype.Load(ofd.FileName);
 				}
-				else
+				catch (Exception ex)
 				{
+					if (ex is FormatException fex)
+					{
+						MessageBox.Show(fex.Message, "Invalid file format", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+
+					prototype.Dispose();
 					btnClassifierLoading.Enabled = true;
 
 					lblTestStatus.ForeColor = Color.DarkRed;
 					lblTestStatus.Text = "Loading failed!";
+					return;
 				}
+
+				DialogResult choice;
+				
+				if (loaded != null)
+				{
+					choice = MessageBox.Show("Loading successful. Would you also like to load the neural prototype as well?", "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+					btnClassifierLoading.Text = "Unload";
+					btnClassifierLoading.Enabled = true;
+					cbUseLoaded.Enabled = true;
+				}
+				else
+				{
+					choice = MessageBox.Show($"Neural network not found in the file, but the prototype has been found.{Environment.NewLine}Would you like to load the neural prototype?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+					btnClassifierLoading.Enabled = true;
+				}
+
+				if (choice == DialogResult.Yes)
+				{
+					AI.BrainPrototype = prototype;
+				}
+				else prototype.Dispose();
+
+				lblTestStatus.ForeColor = Color.DarkGreen;
+				lblTestStatus.Text = "Done!";
 			}
 			else
 			{
@@ -627,10 +595,8 @@ namespace DoodleClassifier
 
 		private void tbDatasetRatio_ValueChanged(object sender, EventArgs e)
 		{
-			var ds = Dataset.Surrogate;
 			var val = tbDatasetRatio.Value;
 			lblDatasetRatio.Text = $"Train/Test ratio: {val}%";
-			ds.TrainRatio = val / 100.0;
 		}
 
 		#endregion

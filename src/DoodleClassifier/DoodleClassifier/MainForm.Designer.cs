@@ -379,7 +379,6 @@
 			// 
 			// btnSaveClassifier
 			// 
-			this.btnSaveClassifier.Enabled = false;
 			this.btnSaveClassifier.Location = new System.Drawing.Point(196, 148);
 			this.btnSaveClassifier.Name = "btnSaveClassifier";
 			this.btnSaveClassifier.Size = new System.Drawing.Size(70, 23);

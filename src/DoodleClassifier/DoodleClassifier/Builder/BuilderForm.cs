@@ -153,37 +153,53 @@ namespace DoodleClassifier
 
 				else if (layer is ConvPrototype conv)
 				{
-					var control = new ConvLayer();
-					control.LayerSize = conv.Size;
-					control.LayerFilter = conv.Filter;
-					control.LayerStride = conv.Stride;
-					control.LayerPadding = conv.Padding;
-					control.LayerActivation = conv.Activation;
-					Add(control);
+					Add
+					(
+						new ConvLayer
+						{
+							LayerSize = conv.Size,
+							LayerFilter = conv.Filter,
+							LayerStride = conv.Stride,
+							LayerPadding = conv.Padding,
+							LayerActivation = conv.Activation
+						}
+					);
 				}
 				else if (layer is PoolPrototype pool)
 				{
-					var control = new PoolLayer();
-					control.LayerFilter = pool.Filter;
-					control.LayerStride = pool.Stride;
-					control.LayerPoolingType = pool.Type;
-					Add(control);
+					Add
+					(
+						new PoolLayer
+						{
+							LayerFilter = pool.Filter,
+							LayerStride = pool.Stride,
+							LayerPoolingType = pool.Type,
+						}
+					);
 				}
 				else if (layer is AdaptPrototype adapt)
 				{
-					var control = new AdaptLayer();
-					control.LayerNormalize = adapt.Normalize;
-					control.LayerActivation = adapt.Activation;
-					control.LayerReshape = adapt.Reshape;
-					if (adapt.Reshape) control.LayerShape = adapt.Shape;
-					Add(control);
+					Add
+					(
+						new AdaptLayer
+						{
+							LayerNormalize = adapt.Normalize,
+							LayerActivation = adapt.Activation,
+							LayerReshape = adapt.Reshape,
+							LayerShape = adapt.Reshape ? adapt.Shape : Shape.Scalar()
+						}
+					);
 				}
 				else if (layer is FCPrototype fc)
 				{
-					var control = new FCLayer();
-					control.LayerSize = fc.Size;
-					control.LayerActivation = fc.Activation;
-					Add(control);
+					Add
+					(
+						new FCLayer
+						{
+							LayerSize = fc.Size,
+							LayerActivation = fc.Activation
+						}
+					);
 				}
 			}
 		}
