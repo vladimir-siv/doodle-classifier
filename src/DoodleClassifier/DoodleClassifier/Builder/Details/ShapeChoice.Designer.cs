@@ -67,11 +67,6 @@
             23,
             0,
             0});
-			this.nudDepth.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
 			this.nudDepth.Name = "nudDepth";
 			this.nudDepth.Size = new System.Drawing.Size(85, 20);
 			this.nudDepth.TabIndex = 5;
@@ -98,11 +93,6 @@
             23,
             0,
             0});
-			this.nudHeight.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
 			this.nudHeight.Name = "nudHeight";
 			this.nudHeight.Size = new System.Drawing.Size(85, 20);
 			this.nudHeight.TabIndex = 3;
@@ -127,11 +117,6 @@
 			this.nudWidth.Maximum = new decimal(new int[] {
             1215752191,
             23,
-            0,
-            0});
-			this.nudWidth.Minimum = new decimal(new int[] {
-            1,
-            0,
             0,
             0});
 			this.nudWidth.Name = "nudWidth";

@@ -68,6 +68,7 @@
 			this.afcActivation.Location = new System.Drawing.Point(11, 33);
 			this.afcActivation.TabIndex = 1;
 			this.afcActivation.Name = "afcActivation";
+			this.afcActivation.Activation = GrandIntelligence.ActivationFunction.LTU;
 			// 
 			// cbReshape
 			// 
@@ -80,6 +81,7 @@
 			this.cbReshape.TabIndex = 2;
 			this.cbReshape.Text = "Reshape output";
 			this.cbReshape.UseVisualStyleBackColor = true;
+			this.cbReshape.CheckedChanged += new System.EventHandler(this.cbReshape_CheckedChanged);
 			// 
 			// scShape
 			// 

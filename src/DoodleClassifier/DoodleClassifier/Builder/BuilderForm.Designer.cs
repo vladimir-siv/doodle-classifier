@@ -30,9 +30,9 @@
 		{
 			this.lbLayers = new System.Windows.Forms.ListBox();
 			this.gbPrototype = new System.Windows.Forms.GroupBox();
-			this.lblInput = new System.Windows.Forms.Label();
-			this.lblOutput = new System.Windows.Forms.Label();
 			this.pnlLayers = new System.Windows.Forms.Panel();
+			this.lblOutput = new System.Windows.Forms.Label();
+			this.lblInput = new System.Windows.Forms.Label();
 			this.btnRemoveLast = new System.Windows.Forms.Button();
 			this.btnClear = new System.Windows.Forms.Button();
 			this.btnAccept = new System.Windows.Forms.Button();
@@ -66,34 +66,34 @@
 			this.gbPrototype.TabStop = false;
 			this.gbPrototype.Text = "Prototype";
 			// 
-			// lblInput
+			// pnlLayers
 			// 
-			this.lblInput.AutoSize = true;
-			this.lblInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblInput.Location = new System.Drawing.Point(60, 16);
-			this.lblInput.Name = "lblInput";
-			this.lblInput.Size = new System.Drawing.Size(127, 20);
-			this.lblInput.TabIndex = 0;
-			this.lblInput.Text = "Input: 28x28x1";
+			this.pnlLayers.AutoScroll = true;
+			this.pnlLayers.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pnlLayers.Location = new System.Drawing.Point(6, 43);
+			this.pnlLayers.Name = "pnlLayers";
+			this.pnlLayers.Size = new System.Drawing.Size(236, 327);
+			this.pnlLayers.TabIndex = 2;
 			// 
 			// lblOutput
 			// 
 			this.lblOutput.AutoSize = true;
 			this.lblOutput.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblOutput.Location = new System.Drawing.Point(69, 374);
+			this.lblOutput.Location = new System.Drawing.Point(69, 375);
 			this.lblOutput.Name = "lblOutput";
 			this.lblOutput.Size = new System.Drawing.Size(104, 20);
 			this.lblOutput.TabIndex = 1;
 			this.lblOutput.Text = "Output: 1xN";
 			// 
-			// pnlLayers
+			// lblInput
 			// 
-			this.pnlLayers.AutoScroll = true;
-			this.pnlLayers.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pnlLayers.Location = new System.Drawing.Point(6, 39);
-			this.pnlLayers.Name = "pnlLayers";
-			this.pnlLayers.Size = new System.Drawing.Size(236, 327);
-			this.pnlLayers.TabIndex = 2;
+			this.lblInput.AutoSize = true;
+			this.lblInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblInput.Location = new System.Drawing.Point(60, 17);
+			this.lblInput.Name = "lblInput";
+			this.lblInput.Size = new System.Drawing.Size(127, 20);
+			this.lblInput.TabIndex = 0;
+			this.lblInput.Text = "Input: 28x28x1";
 			// 
 			// btnRemoveLast
 			// 

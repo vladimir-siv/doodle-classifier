@@ -77,7 +77,78 @@ namespace DoodleClassifier
 
 		private NeuralBuilder BuildPrototype()
 		{
-			throw new NotImplementedException();
+			NeuralBuilder builder = null;
+
+			try
+			{
+				builder = new NeuralBuilder(Shape.As3D(RawData.ImageHeight, RawData.ImageWidth, 1u), bindInput: false);
+
+				for (var i = 0; i < pnlLayers.Controls.Count; ++i)
+				{
+					var control = pnlLayers.Controls[i];
+
+					if (!(control is UserControl)) continue;
+
+					else if (control is ConvLayer conv)
+					{
+						builder.ConvLayer
+						(
+							conv.LayerSize,
+							conv.LayerFilter,
+							conv.LayerStride,
+							conv.LayerPadding,
+							conv.LayerActivation
+						);
+					}
+
+					else if (control is PoolLayer pool)
+					{
+						builder.PoolLayer
+						(
+							pool.LayerFilter,
+							pool.LayerStride,
+							pool.LayerPoolingType
+						);
+					}
+
+					else if (control is AdaptLayer adapt)
+					{
+						if (adapt.LayerReshape)
+						{
+							builder.AdaptLayer
+							(
+								adapt.LayerShape,
+								adapt.LayerNormalize,
+								adapt.LayerActivation
+							);
+						}
+						else
+						{
+							builder.AdaptLayer
+							(
+								adapt.LayerNormalize,
+								adapt.LayerActivation
+							);
+						}
+					}
+
+					else if (control is FCLayer fc)
+					{
+						builder.FCLayer
+						(
+							fc.LayerSize,
+							fc.LayerActivation
+						);
+					}
+				}
+
+				return builder;
+			}
+			catch
+			{
+				builder?.Dispose();
+				throw;
+			}
 		}
 
 		private void btnAccept_Click(object sender, EventArgs e)
