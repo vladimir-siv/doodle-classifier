@@ -394,7 +394,7 @@ namespace DoodleClassifier
 				lblTrainIndicator.ForeColor = Color.DimGray;
 				training = false;
 
-				if (done || AI.System.CurrentGeneration > 1u) classifier = AI.Best();
+				if (done || AI.System.CurrentGeneration == 1u) classifier = AI.Best();
 				else classifier = AI.PrevBest();
 			}
 		}
