@@ -168,6 +168,7 @@ namespace DoodleClassifier
 				}
 
 				prototype = builder;
+				MessageBox.Show("Prototype created.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				DialogResult = DialogResult.OK;
 			}
 			catch (Exception ex)

@@ -45,14 +45,13 @@
 			// 
 			this.cbPool.FormattingEnabled = true;
 			this.cbPool.Items.AddRange(new object[] {
-            "None",
             "Max",
             "Avg"});
 			this.cbPool.Location = new System.Drawing.Point(71, 5);
 			this.cbPool.Name = "cbPool";
 			this.cbPool.Size = new System.Drawing.Size(85, 21);
 			this.cbPool.TabIndex = 1;
-			this.cbPool.Text = "None";
+			this.cbPool.Text = "Max";
 			// 
 			// PoolChoice
 			// 
