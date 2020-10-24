@@ -144,15 +144,15 @@ namespace DoodleClassifier
 			}
 		}
 
-		public static string Serialize(this Layer.Convolutional.Filter filter) => $"{filter.width},{filter.height}";
+		public static string Serialize(this Layer.Convolutional.Filter filter) => $"{filter.width}x{filter.height}";
 		public static string Serialize(this Layer.Convolutional.Stride stride) => $"{stride.horizontal},{stride.vertical}";
 		public static string Serialize(this Layer.Convolutional.Padding padding) => $"{padding.horizontal},{padding.vertical}";
-		public static string Serialize(this Layer.Pooling.Filter filter) => $"{filter.width},{filter.height}";
+		public static string Serialize(this Layer.Pooling.Filter filter) => $"{filter.width}x{filter.height}";
 		public static string Serialize(this Layer.Pooling.Stride stride) => $"{stride.horizontal},{stride.vertical}";
 		
 		public static Layer.Convolutional.Filter DeserializeAsConvFilter(this string str)
 		{
-			var parts = str.Split(',');
+			var parts = str.Split('x');
 			if (parts.Length != 2) throw new FormatException("Invalid format.");
 			return new Layer.Convolutional.Filter(Convert.ToUInt32(parts[0]), Convert.ToUInt32(parts[1]));
 		}
@@ -170,7 +170,7 @@ namespace DoodleClassifier
 		}
 		public static Layer.Pooling.Filter DeserializeAsPoolFilter(this string str)
 		{
-			var parts = str.Split(',');
+			var parts = str.Split('x');
 			if (parts.Length != 2) throw new FormatException("Invalid format.");
 			return new Layer.Pooling.Filter(Convert.ToUInt32(parts[0]), Convert.ToUInt32(parts[1]));
 		}
