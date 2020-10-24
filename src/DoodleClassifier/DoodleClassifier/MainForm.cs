@@ -252,6 +252,8 @@ namespace DoodleClassifier
 			func = null;
 			builder?.Dispose();
 			builder = null;
+
+			AI.Dispose();
 		}
 
 		private void tbFitness_DoubleClick(object sender, EventArgs e)
@@ -407,7 +409,7 @@ namespace DoodleClassifier
 			btnBuilder.Enabled = btnTrain.Enabled = true;
 
 			classifier = null;
-			AI.Dispose();
+			AI.Dispose(false);
 
 			lblTrainStatus.ForeColor = Color.Brown;
 			lblTrainStatus.Text = "Training reset.";

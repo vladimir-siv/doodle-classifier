@@ -262,10 +262,13 @@ namespace DoodleClassifier
 			);
 		}
 
-		public static void Dispose()
+		public static void Dispose(bool disposePrototype = true)
 		{
-			brainPrototype?.Dispose();
-			brainPrototype = null;
+			if (disposePrototype)
+			{
+				brainPrototype?.Dispose();
+				brainPrototype = null;
+			}
 
 			Batch = null;
 
