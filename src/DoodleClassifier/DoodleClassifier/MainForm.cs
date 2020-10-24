@@ -370,22 +370,57 @@ namespace DoodleClassifier
 				var ds = Dataset.Surrogate;
 				ds.TrainRatio = tbDatasetRatio.Value / 100.0;
 
-				await AI.Init(crossover, popSize, parentCnt, mutationRate, generations);
+				var done = false;
+				var failed = false;
 
-				lblTrainStatus.ForeColor = Color.DarkOrange;
-				lblTrainStatus.Text = "Preparing . . .";
-
-				var done = await AI.Train(func, localBatch, globalBatch);
-
-				if (done)
+				try
 				{
-					lblTrainStatus.ForeColor = Color.DarkGreen;
-					lblTrainStatus.Text = "Training done.";
+					await AI.Init(crossover, popSize, parentCnt, mutationRate, generations);
+
+					lblTrainStatus.ForeColor = Color.DarkOrange;
+					lblTrainStatus.Text = "Preparing . . .";
+
+					done = await AI.Train(func, localBatch, globalBatch);
+				}
+				catch (Exception ex)
+				{
+					var sb = new StringBuilder();
+
+					sb.AppendLine("Training failed! Reason:");
+
+					if (GICore.ExceptionCount > 0u)
+					{
+						while (GICore.ExceptionCount > 0u)
+						{
+							sb.Append($"{Environment.NewLine}\t'{GICore.NextException}'");
+						}
+					}
+					else sb.Append($"{Environment.NewLine}\t'{ex.Message}'");
+
+					var message = sb.ToString();
+
+					failed = true;
+
+					MessageBox.Show(message, ex.GetType().FullName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
+
+				if (!failed)
+				{
+					if (done)
+					{
+						lblTrainStatus.ForeColor = Color.DarkGreen;
+						lblTrainStatus.Text = "Training done.";
+					}
+					else
+					{
+						lblTrainStatus.ForeColor = Color.DarkRed;
+						lblTrainStatus.Text = "Training stopped.";
+					}
 				}
 				else
 				{
-					lblTrainStatus.ForeColor = Color.DarkRed;
-					lblTrainStatus.Text = "Training stopped.";
+					lblTrainStatus.ForeColor = Color.Red;
+					lblTrainStatus.Text = "Training failed.";
 				}
 
 				btnTrain.Text = "Train";
@@ -398,8 +433,11 @@ namespace DoodleClassifier
 				lblTrainIndicator.ForeColor = Color.DimGray;
 				training = false;
 
-				if (done || AI.System.CurrentGeneration == 1u) classifier = AI.Best();
-				else classifier = AI.PrevBest();
+				if (!failed)
+				{
+					if (done || AI.System.CurrentGeneration == 1u) classifier = AI.Best();
+					else classifier = AI.PrevBest();
+				}
 			}
 		}
 
@@ -549,11 +587,11 @@ namespace DoodleClassifier
 					return;
 				}
 
-				DialogResult choice = DialogResult.No;
+				var choice = DialogResult.No;
 				
 				if (loaded != null)
 				{
-					if (!training) choice = MessageBox.Show("Loading successful. Would you also like to load the neural prototype as well?", "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+					if (!training && classifier == null) choice = MessageBox.Show("Loading successful. Would you also like to load the neural prototype as well?", "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
 					btnClassifierLoading.Text = "Unload";
 					btnClassifierLoading.Enabled = true;
@@ -561,7 +599,8 @@ namespace DoodleClassifier
 				}
 				else
 				{
-					if (!training) choice = MessageBox.Show($"Neural network not found in the file, but the prototype has been found.{Environment.NewLine}Would you like to load the neural prototype?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+					if (!training && classifier == null) choice = MessageBox.Show($"Neural network not found in the file, but the prototype has been found.{Environment.NewLine}Would you like to load the neural prototype?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+					else MessageBox.Show("Neural network not found in the file. Prototype will be discarded since training is in progress or a trained classifier is present.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
 					btnClassifierLoading.Enabled = true;
 				}
