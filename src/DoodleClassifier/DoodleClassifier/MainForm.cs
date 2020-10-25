@@ -42,6 +42,8 @@ namespace DoodleClassifier
 			InitializeTraining();
 			InitializeTesting();
 			InitializeDataset();
+
+			Text += $" [Running on: {Device.Active.Type}]";
 		}
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
