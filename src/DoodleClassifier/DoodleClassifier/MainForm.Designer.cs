@@ -375,7 +375,7 @@
 			this.cbCrossover.Name = "cbCrossover";
 			this.cbCrossover.Size = new System.Drawing.Size(100, 21);
 			this.cbCrossover.TabIndex = 9;
-			this.cbCrossover.Text = "SEC";
+			this.cbCrossover.Text = "RFC";
 			// 
 			// btnSaveClassifier
 			// 
@@ -403,7 +403,7 @@
 			this.tbGenerations.Name = "tbGenerations";
 			this.tbGenerations.Size = new System.Drawing.Size(100, 20);
 			this.tbGenerations.TabIndex = 3;
-			this.tbGenerations.Text = "1000";
+			this.tbGenerations.Text = "10000";
 			// 
 			// lblGenerations
 			// 
@@ -441,7 +441,7 @@
 			this.tbGlobalBatch.Name = "tbGlobalBatch";
 			this.tbGlobalBatch.Size = new System.Drawing.Size(100, 20);
 			this.tbGlobalBatch.TabIndex = 15;
-			this.tbGlobalBatch.Text = "4";
+			this.tbGlobalBatch.Text = "16";
 			// 
 			// lblGlobalBatch
 			// 
@@ -458,7 +458,7 @@
 			this.tbLocalBatch.Name = "tbLocalBatch";
 			this.tbLocalBatch.Size = new System.Drawing.Size(100, 20);
 			this.tbLocalBatch.TabIndex = 13;
-			this.tbLocalBatch.Text = "4";
+			this.tbLocalBatch.Text = "16";
 			// 
 			// lblLocalBatch
 			// 

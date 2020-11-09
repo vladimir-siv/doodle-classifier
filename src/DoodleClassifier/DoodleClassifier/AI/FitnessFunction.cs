@@ -4,17 +4,17 @@ namespace DoodleClassifier
 {
 	public class FitnessFunction
 	{
-		public double HitsPower { get; set; } = 2.4;
+		public double HitsPower { get; set; } = 2.17;
 		public double HitsCorrection { get; set; } = 0.0;
-		public double HitsWeight { get; set; } = 3.2e0;
+		public double HitsWeight { get; set; } = 1.5;
 
 		public double MissesPower { get; set; } = 2.0;
 		public double MissesCorrection { get; set; } = 0.0;
-		public double MissesWeight { get; set; } = 1e-2;
+		public double MissesWeight { get; set; } = 0.01;
 
 		public double VariancePower { get; set; } = 2.0;
 		public double VarianceCorrection { get; set; } = 0.0;
-		public double VarianceWeight { get; set; } = 7.3e1;
+		public double VarianceWeight { get; set; } = 7.4;
 
 		public float Calculate(uint[] hitdistribution, uint hits, uint misses)
 		{
